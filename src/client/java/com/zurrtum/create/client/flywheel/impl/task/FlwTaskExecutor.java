@@ -20,6 +20,10 @@ public final class FlwTaskExecutor {
         return INSTANCE.get();
     }
 
+    public static void shutdown() {
+        INSTANCE.shutdown();
+    }
+
     /**
      * Returns the "optimal" number of threads to be used for tasks. This will always return at least one thread.
      */
@@ -49,6 +53,14 @@ public final class FlwTaskExecutor {
             }
 
             return result;
+        }
+
+        public final void shutdown() {
+            TaskExecutorImpl executor = reference.get();
+            if (executor instanceof ParallelTaskExecutor parallelExecutor) {
+                parallelExecutor.stopWorkers();
+                reference.compareAndSet(executor, null);
+            }
         }
 
         protected TaskExecutorImpl initialize() {

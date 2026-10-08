@@ -213,6 +213,11 @@ public class VisualizationManagerImpl implements VisualizationManager {
         MANAGERS.reset();
     }
 
+    public static void shutdown() {
+        resetAll();
+        FlwTaskExecutor.shutdown();
+    }
+
     @Override
     public Vec3i renderOrigin() {
         if (lateInit == null) {

@@ -56,6 +56,7 @@ import com.zurrtum.create.client.content.trains.track.TrackTargetingClient;
 import com.zurrtum.create.client.flywheel.backend.compile.FlwProgramsReloader;
 import com.zurrtum.create.client.flywheel.impl.BackendManagerImpl;
 import com.zurrtum.create.client.flywheel.impl.FlwImpl;
+import com.zurrtum.create.client.flywheel.impl.visualization.VisualizationManagerImpl;
 import com.zurrtum.create.client.flywheel.impl.visualization.VisualizationEventHandler;
 import com.zurrtum.create.client.flywheel.lib.util.LevelAttached;
 import com.zurrtum.create.client.flywheel.lib.util.RendererReloadCache;
@@ -311,6 +312,11 @@ public abstract class MinecraftMixin {
         WorldAttached.invalidateWorld(level);
         CobbleGenOptimisation.invalidateWorld(level);
         Ponder.invalidateRenderers();
+    }
+
+    @Inject(method = "close()V", at = @At("HEAD"))
+    private void onClose(CallbackInfo ci) {
+        VisualizationManagerImpl.shutdown();
     }
 
     @Inject(method = "pickBlockOrEntity()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;hasControlDown()Z"), cancellable = true)
