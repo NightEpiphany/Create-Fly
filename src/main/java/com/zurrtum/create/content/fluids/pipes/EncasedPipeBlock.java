@@ -142,7 +142,7 @@ public class EncasedPipeBlock extends Block implements IWrenchable, SpecialBlock
             return InteractionResult.SUCCESS;
         }
 
-        context.getLevel().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, context.getClickedPos(), getId(state));
+        context.getLevel().levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, context.getClickedPos(), getId(state));
         BlockState equivalentPipe = transferSixWayProperties(state, AllBlocks.FLUID_PIPE.defaultBlockState());
 
         Direction firstFound = Direction.UP;

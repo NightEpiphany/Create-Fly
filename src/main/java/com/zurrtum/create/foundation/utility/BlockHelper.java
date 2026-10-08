@@ -320,7 +320,7 @@ public class BlockHelper {
         BlockState state = world.getBlockState(pos);
 
         if (world.getRandom().nextFloat() < effectChance) {
-            world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+            world.levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, pos, Block.getId(state));
         }
         BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
 
@@ -359,7 +359,7 @@ public class BlockHelper {
                 .getLevel(enchantmentRegistry.getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
                 if (!world.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, pos)) {
                     BlockState below = world.getBlockState(pos.below());
-                    if (below.blocksMotion() || below.liquid()) {
+                    if (below.isSolid() || below.liquid()) {
                         fluidState = IceBlock.meltsInto().getFluidState();
                     }
                 }

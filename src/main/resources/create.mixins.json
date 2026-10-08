@@ -7,7 +7,6 @@
     "AbstractMinecartMixin",
     "BlockItemMixin",
     "BlockPlaceContextMixin",
-    "BlocksMixin",
     "BuiltInPackSourceMixin",
     "BuiltInRegistriesMixin",
     "ChunkMapMixin",
@@ -29,8 +28,6 @@
     "ExperienceOrbMixin",
     "ExperimentalRedstoneWireEvaluatorMixin",
     "ExplosionDamageCalculatorMixin",
-    "FluidsMixin",
-    "FuelValuesMixin",
     "GameProtocolsMixin",
     "HoneycombItemMixin",
     "ItemEntityMixin",
@@ -55,8 +52,10 @@
     "PlayerMixin",
     "RailStateMixin",
     "RecipeManagerMixin",
-    "RedStoneWireBlockMixin",
+    "RecipeMapInvoker",
+    "RecipeMapMixin",
     "RegistryDataLoaderMixin",
+    "RedStoneWireBlockMixin",
     "ReloadableServerResourcesMixin",
     "ServerConfigurationPacketListenerImplMixin",
     "ServerGamePacketListenerImplMixin",
@@ -78,7 +77,7 @@
   "plugin": "com.zurrtum.create.mixin.MixinPlugin",
   "injectors": {
     "maxShiftBy": 2,
-    "defaultRequire": 1
+    "defaultRequire": 0
   },
   "mixinextras": {"minVersion": "0.5.0-beta.1"}
 }

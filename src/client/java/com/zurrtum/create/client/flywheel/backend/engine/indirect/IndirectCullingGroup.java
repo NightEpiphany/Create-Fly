@@ -194,7 +194,9 @@ public class IndirectCullingGroup<I extends Instance> {
                 drawProgram.bind();
             }
 
-            MaterialRenderState.setup(multiDraw.material);
+            if (!MaterialRenderState.setup(multiDraw.material)) {
+                continue;
+            }
 
             multiDraw.submit(drawProgram);
         }
@@ -227,7 +229,9 @@ public class IndirectCullingGroup<I extends Instance> {
                 drawProgram.setFloat("_flw_blueNoiseFactor", 0.07f);
             }
 
-            MaterialRenderState.setupOit(multiDraw.material);
+            if (!MaterialRenderState.setupOit(multiDraw.material)) {
+                continue;
+            }
 
             multiDraw.submit(drawProgram);
         }

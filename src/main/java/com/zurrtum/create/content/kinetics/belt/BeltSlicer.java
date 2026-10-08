@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.belt;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.catnip.math.VecHelper;
@@ -107,10 +108,10 @@ public class BeltSlicer {
                 Block.UPDATE_ALL | Block.UPDATE_MOVE_BY_PISTON
             );
             world.removeBlockEntity(pos);
-            world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+            world.levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, pos, Block.getId(state));
 
             if (!creative && replacedState.is(AllBlocks.BELT) && replacedState.getValue(BeltBlock.PART) == BeltPart.PULLEY) {
-                player.getInventory().placeItemBackInInventory(AllItems.SHAFT.getDefaultInstance());
+                InventoryCompat.placeItemBack(player.getInventory(), AllItems.SHAFT.getDefaultInstance());
             }
 
             // Eject overshooting items
@@ -142,7 +143,7 @@ public class BeltSlicer {
                         );
                         entity.setDeltaMovement(Vec3.ZERO);
                         entity.setDefaultPickUpDelay();
-                        entity.hurtMarked = true;
+                        entity.syncVelocity = true;
                         world.addFreshEntity(entity);
                     } else {
                         segmentBE.getInventory().addItem(transportedItemStack);
@@ -220,9 +221,9 @@ public class BeltSlicer {
                 }
 
                 if (!world.isClientSide()) {
-                    player.getInventory().placeItemBackInInventory(new ItemStack(AllItems.SHAFT, amountRetrieved));
+                    InventoryCompat.placeItemBack(player.getInventory(), new ItemStack(AllItems.SHAFT, amountRetrieved));
                     if (beltFound) {
-                        player.getInventory().placeItemBackInInventory(AllItems.BELT_CONNECTOR.getDefaultInstance());
+                        InventoryCompat.placeItemBack(player.getInventory(), AllItems.BELT_CONNECTOR.getDefaultInstance());
                     }
                 }
                 return InteractionResult.FAIL;
@@ -411,8 +412,8 @@ public class BeltSlicer {
                 );
 
                 if (!creative) {
-                    player.getInventory().placeItemBackInInventory(new ItemStack(AllBlocks.SHAFT, 2));
-                    player.getInventory().placeItemBackInInventory(AllItems.BELT_CONNECTOR.getDefaultInstance());
+                    InventoryCompat.placeItemBack(player.getInventory(), new ItemStack(AllBlocks.SHAFT, 2));
+                    InventoryCompat.placeItemBack(player.getInventory(), AllItems.BELT_CONNECTOR.getDefaultInstance());
                 }
 
                 for (BlockPos blockPos : BeltBlock.getBeltChain(world, controllerBE.getBlockPos())) {

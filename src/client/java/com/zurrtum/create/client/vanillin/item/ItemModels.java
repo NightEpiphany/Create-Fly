@@ -43,6 +43,11 @@ public class ItemModels {
         ThreadLocalObjects::new);
 
     public static boolean isSupported(ItemStack stack, ItemDisplayContext context) {
+        // 26.3 port: BakedItemModelBufferer.bufferItemStack is not ported yet (would give empty models),
+        // so item visuals fall back to vanilla rendering.
+        if (!BakedItemModelBufferer.isPorted()) {
+            return false;
+        }
         if (stack.is(NO_INSTANCING)) {
             return false;
         }

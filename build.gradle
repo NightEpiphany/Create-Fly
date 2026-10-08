@@ -17,7 +17,7 @@ repositories {
             }
         }
     }
-    addGroup("https://maven.blamejared.com", "mezz.jei")
+    addGroup("https://maven.blamejared.com", "mezz.jei", "net.mezzdev.config")
     addGroup("https://maven.cassian.cc", "cc.cassian.rrv")
     addGroup("https://maven.squiddev.cc", "cc.tweaked")
     addGroup("https://maven.nucleoid.xyz/releases", "eu.pb4")
@@ -102,6 +102,7 @@ dependencies {
 //        modClientRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 //    }
     clientCompileOnly "mezz.jei:jei-${project.jei_version}"
+    clientCompileOnly "maven.modrinth:7tEfOcA7:GKiA7PV4"
 //    modCompileOnly "maven.modrinth:eiv:${project.eiv_version}"
     clientCompileOnly "cc.cassian.rrv:reliable-recipe-viewer-fabric:${rrv_version}"
     compileOnly "cc.tweaked:cc-tweaked-${project.cct_version}"
@@ -123,6 +124,7 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 25
+    it.options.compilerArgs += ["-Xmaxerrs", "5000"]
 }
 
 java {

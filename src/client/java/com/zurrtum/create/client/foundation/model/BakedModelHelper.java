@@ -1,5 +1,7 @@
 package com.zurrtum.create.client.foundation.model;
 
+import com.zurrtum.create.client.foundation.utility.MaterialShade;
+
 import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.model.NormalsBakedQuad;
@@ -221,14 +223,7 @@ public class BakedModelHelper {
                 quad.packedUV2(),
                 quad.packedUV3(),
                 quad.direction(),
-                new MaterialInfo(
-                    info.sprite(),
-                    layer,
-                    itemRenderType,
-                    info.tintIndex(),
-                    info.shade(),
-                    info.lightEmission()
-                )
+                MaterialShade.copy(info, info.sprite(), layer, itemRenderType, MaterialShade.shade(info))
             );
             setNormals(newQuad, quad);
             result.add(newQuad);

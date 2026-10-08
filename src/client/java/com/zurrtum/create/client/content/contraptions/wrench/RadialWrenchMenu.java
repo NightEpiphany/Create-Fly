@@ -1,5 +1,6 @@
 package com.zurrtum.create.client.content.contraptions.wrench;
 
+import com.mojang.blaze3d.platform.InputConstants;
 
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.catnip.math.AngleHelper;
@@ -415,11 +416,11 @@ public class RadialWrenchMenu extends AbstractSimiScreen {
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         int button = click.button();
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             submitChange();
             return true;
         }
-        if (button == 1) {
+        if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
             onClose();
             return true;
         }

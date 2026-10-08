@@ -12,7 +12,7 @@ import java.util.Locale;
 public enum InstructionSpeedModifiers implements StringRepresentable {
     FORWARD_FAST(2), FORWARD(1), BACK(-1), BACK_FAST(-2);
 
-    public static final Codec<InstructionSpeedModifiers> CODEC = StringRepresentable.fromEnum(InstructionSpeedModifiers::values);
+    public static final Codec<InstructionSpeedModifiers> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(InstructionSpeedModifiers::values);
     public static final StreamCodec<ByteBuf, InstructionSpeedModifiers> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         InstructionSpeedModifiers.class);
 

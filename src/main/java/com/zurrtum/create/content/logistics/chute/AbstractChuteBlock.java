@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.logistics.chute;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllAdvancements;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.catnip.data.Iterate;
@@ -248,7 +249,7 @@ public abstract class AbstractChuteBlock extends Block implements IWrenchable, I
                 if (be.item.isEmpty()) {
                     return InteractionResult.TRY_WITH_EMPTY_HAND;
                 }
-                player.getInventory().placeItemBackInInventory(be.item);
+                InventoryCompat.placeItemBack(player.getInventory(), be.item);
                 be.setItem(ItemStack.EMPTY);
                 return InteractionResult.SUCCESS;
             }

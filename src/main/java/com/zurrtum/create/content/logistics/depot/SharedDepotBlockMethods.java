@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.logistics.depot;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
@@ -77,7 +78,7 @@ public class SharedDepotBlockMethods {
                 }
             }
             if (!mainItemStack.isEmpty()) {
-                player.getInventory().placeItemBackInInventory(mainItemStack);
+                InventoryCompat.placeItemBack(player.getInventory(), mainItemStack);
                 behaviour.removeHeldItem();
                 level.playSound(
                     null,
@@ -96,7 +97,7 @@ public class SharedDepotBlockMethods {
             if (itemStack.isEmpty()) {
                 continue;
             }
-            player.getInventory().placeItemBackInInventory(itemStack);
+            InventoryCompat.placeItemBack(player.getInventory(), itemStack);
             change = true;
         }
         if (change) {

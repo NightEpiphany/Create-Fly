@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.trains.station;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllClientHandle;
 import com.zurrtum.create.AllItems;
@@ -169,7 +170,7 @@ public class StationBlock extends Block implements IBE<StationBlockEntity>, Item
                 if (level.isClientSide()) {
                     return InteractionResult.SUCCESS;
                 }
-                player.getInventory().placeItemBackInInventory(autoSchedule.copy());
+                InventoryCompat.placeItemBack(player.getInventory(), autoSchedule.copy());
                 station.depotBehaviour.removeHeldItem();
                 station.notifyUpdate();
                 player.level().playSound(

@@ -1,6 +1,6 @@
 package com.zurrtum.create.content.logistics.factoryBoard;
 
-import com.mojang.serialization.MapCodec;
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllShapes;
@@ -57,8 +57,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.UUID;
 
 public class FactoryPanelBlock extends FaceAttachedHorizontalDirectionalBlock implements ProperWaterloggedBlock, IBE<FactoryPanelBlockEntity>, IWrenchable, SpecialBlockItemRequirement, BreakControlBlock {
-    public static final MapCodec<FactoryPanelBlock> CODEC = simpleCodec(FactoryPanelBlock::new);
-
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public FactoryPanelBlock(Properties p_53182_) {
@@ -151,7 +149,7 @@ public class FactoryPanelBlock extends FaceAttachedHorizontalDirectionalBlock im
                 }
 
                 if (!player.isCreative()) {
-                    player.getInventory().placeItemBackInInventory(AllItems.FACTORY_GAUGE.getDefaultInstance());
+                    InventoryCompat.placeItemBack(player.getInventory(), AllItems.FACTORY_GAUGE.getDefaultInstance());
                 }
 
                 IWrenchable.playRemoveSound(world, pos);
@@ -396,10 +394,5 @@ public class FactoryPanelBlock extends FaceAttachedHorizontalDirectionalBlock im
     @Override
     public ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity blockEntity) {
         return ItemRequirement.NONE;
-    }
-
-    @Override
-    protected MapCodec<? extends FaceAttachedHorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

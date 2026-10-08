@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.processing.burner;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllEntityTags;
 import com.zurrtum.create.AllItems;
@@ -144,7 +145,7 @@ public class BlazeBurnerBlockItem extends BlockItem {
             player.setItemInHand(hand, filled);
             return;
         }
-        player.getInventory().placeItemBackInInventory(filled);
+        InventoryCompat.placeItemBack(player.getInventory(), filled);
     }
 
     private void spawnCaptureEffects(Level world, Vec3 vec) {

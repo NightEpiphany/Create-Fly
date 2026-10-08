@@ -41,6 +41,11 @@ public class Create implements ClientModInitializer {
         new Flywheel().onInitializeClient();
         new Ponder().onInitializeClient();
         new Vanillin().onInitializeClient();
+        com.zurrtum.create.content.contraptions.AbstractContraptionEntity.aimedAtBlocks = (entity, player) -> {
+            net.minecraft.world.phys.Vec3 origin = player.getEyePosition(1);
+            net.minecraft.world.phys.Vec3 target = origin.add(player.getViewVector(1).scale(player.blockInteractionRange() + 1));
+            return com.zurrtum.create.client.content.contraptions.ContraptionHandlerClient.rayTraceContraption(origin, target, entity) != null;
+        };
         SOUL_PULSE_EFFECT_HANDLER = new SoulPulseEffectHandler();
         VALUE_SETTINGS_HANDLER = new ValueSettingsClient();
         GLUE_HANDLER = new SuperGlueSelectionHandler();

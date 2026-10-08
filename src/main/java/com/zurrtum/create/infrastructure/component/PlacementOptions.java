@@ -11,7 +11,7 @@ import java.util.Locale;
 public enum PlacementOptions implements StringRepresentable {
     Merged, Attached, Inserted;
 
-    public static final Codec<PlacementOptions> CODEC = StringRepresentable.fromEnum(PlacementOptions::values);
+    public static final Codec<PlacementOptions> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(PlacementOptions::values);
     public static final StreamCodec<ByteBuf, PlacementOptions> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         PlacementOptions.class);
 

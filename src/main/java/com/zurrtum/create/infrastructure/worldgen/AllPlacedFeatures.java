@@ -70,5 +70,7 @@ public class AllPlacedFeatures {
     }
 
     public static void register() {
+        AllFeatures.register();
+        AllPlacementModifiers.register();
     }
 }

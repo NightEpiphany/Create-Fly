@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.deployer;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.google.common.collect.HashMultimap;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.AllItemTags;
@@ -178,7 +179,7 @@ public class DeployerHandler {
                     serverPlayer.attack(entity);
                     AllSynchedDatas.CAPTURE_DROPS.set(entity, Optional.empty());
                 }
-                capturedDrops.forEach(e -> serverPlayer.getInventory().placeItemBackInInventory(e));
+                capturedDrops.forEach(e -> InventoryCompat.placeItemBack(serverPlayer.getInventory(), e));
                 return;
             }
         } else {
@@ -237,7 +238,7 @@ public class DeployerHandler {
                 }
 
                 AllSynchedDatas.CAPTURE_DROPS.set(entity, Optional.empty());
-                capturedDrops.forEach(e -> serverPlayer.getInventory().placeItemBackInInventory(e));
+                capturedDrops.forEach(e -> InventoryCompat.placeItemBack(serverPlayer.getInventory(), e));
                 if (success) {
                     return;
                 }
@@ -475,7 +476,7 @@ public class DeployerHandler {
         }
 
         net.minecraft.world.level.block.Block.getDrops(blockstate, world, pos, blockEntity, player.cast(), prevHeldItem)
-            .forEach(item -> serverPlayer.getInventory().placeItemBackInInventory(item));
+            .forEach(item -> InventoryCompat.placeItemBack(serverPlayer.getInventory(), item));
         blockstate.spawnAfterBreak(world, pos, prevHeldItem, true);
         return true;
     }
@@ -493,7 +494,7 @@ public class DeployerHandler {
         try {
             InteractionResult result = BlockHelper.invokeUse(state, world, player.cast(), hand, ray);
             for (ItemEntity itemEntity : drops) {
-                player.cast().getInventory().placeItemBackInInventory(itemEntity.getItem());
+                InventoryCompat.placeItemBack(player.cast().getInventory(), itemEntity.getItem());
             }
             return result;
         } finally {

@@ -53,7 +53,7 @@ public class EncasedShaftBlock extends AbstractEncasedShaftBlock implements IBE<
         if (context.getLevel().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
-        context.getLevel().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, context.getClickedPos(), getId(state));
+        context.getLevel().levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, context.getClickedPos(), getId(state));
         KineticBlockEntity.switchToBlockState(
             context.getLevel(),
             context.getClickedPos(),

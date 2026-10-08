@@ -424,7 +424,7 @@ public abstract class AbstractContraptionEntity extends Entity {
         if (level().isClientSide()) {
             InterpolationHandler interpolator = living.getInterpolation();
             if (interpolator != null) {
-                interpolator.interpolationData.steps = 0;
+                interpolator.cancel();
             }
             living.lerpHeadTo(0, 0);
             living.setYRot(angle);
@@ -818,7 +818,7 @@ public abstract class AbstractContraptionEntity extends Entity {
 
     @Override
     public PushReaction getPistonPushReaction() {
-        return PushReaction.IGNORE;
+        return PushReaction.IGNORE_ENTITY;
     }
 
     public void setContraptionMotion(Vec3 vec) {
@@ -828,6 +828,21 @@ public abstract class AbstractContraptionEntity extends Entity {
     @Override
     public boolean isPickable() {
         return false;
+    }
+
+    /**
+     * Set by the client: true when the player is aiming at one of this contraption's blocks.
+     */
+    public static java.util.function.BiPredicate<AbstractContraptionEntity, Player> aimedAtBlocks = (entity, player) -> false;
+
+    /**
+     * Tooltip mods such as Jade skip entities that are invisible to the player. The contraption is only reported as
+     * visible when one of its own blocks is aimed at, so blocks in or behind its bounding box (plants for instance)
+     * are targeted normally.
+     */
+    @Override
+    public boolean isInvisibleTo(Player player) {
+        return !level().isClientSide() || !aimedAtBlocks.test(this, player);
     }
 
     @Override
@@ -887,7 +902,7 @@ public abstract class AbstractContraptionEntity extends Entity {
             riding = riding.getVehicle();
         }
 
-        return e.getPistonPushReaction() == PushReaction.NORMAL;
+        return e.getPistonPushReaction() == PushReaction.PUSH_PULL;
     }
 
     @Override

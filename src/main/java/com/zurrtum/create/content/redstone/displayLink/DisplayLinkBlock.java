@@ -1,6 +1,5 @@
 package com.zurrtum.create.content.redstone.displayLink;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllClientHandle;
@@ -43,8 +42,6 @@ import java.util.function.Consumer;
 public class DisplayLinkBlock extends WrenchableDirectionalBlock implements IBE<DisplayLinkBlockEntity>, NeighborUpdateListeningBlock {
 
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-
-    public static final MapCodec<DisplayLinkBlock> CODEC = simpleCodec(DisplayLinkBlock::new);
 
     public DisplayLinkBlock(Properties p_i48415_1_) {
         super(p_i48415_1_);
@@ -215,10 +212,5 @@ public class DisplayLinkBlock extends WrenchableDirectionalBlock implements IBE<
     @Override
     public BlockEntityType<? extends DisplayLinkBlockEntity> getBlockEntityType() {
         return AllBlockEntityTypes.DISPLAY_LINK;
-    }
-
-    @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
     }
 }

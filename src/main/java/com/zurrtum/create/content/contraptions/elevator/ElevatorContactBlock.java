@@ -1,6 +1,5 @@
 package com.zurrtum.create.content.contraptions.elevator;
 
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllClientHandle;
@@ -45,8 +44,6 @@ public class ElevatorContactBlock extends WrenchableDirectionalBlock implements 
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty CALLING = BooleanProperty.create("calling");
     public static final BooleanProperty POWERING = BrassDiodeBlock.POWERING;
-
-    public static final MapCodec<ElevatorContactBlock> CODEC = simpleCodec(ElevatorContactBlock::new);
 
     public ElevatorContactBlock(Properties pProperties) {
         super(pProperties);
@@ -285,10 +282,5 @@ public class ElevatorContactBlock extends WrenchableDirectionalBlock implements 
 
     public static int getLight(BlockState state) {
         return state.getValue(POWERING) ? 10 : 0;
-    }
-
-    @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
     }
 }

@@ -1,5 +1,6 @@
 package com.zurrtum.create.mixin;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -134,7 +135,7 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    @WrapOperation(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
+    @WrapOperation(method = "drop(Lnet/minecraft/world/item/ItemStack;ZLnet/minecraft/util/Prediction;)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean captureDrops(Level world, Entity entity, Operation<Boolean> original) {
         if (AllSynchedDatas.CRUSH_DROP.get(this)) {
             entity.setDeltaMovement(Vec3.ZERO);
@@ -182,7 +183,7 @@ public abstract class LivingEntityMixin extends Entity {
             case 1 -> AllSynchedDatas.CRUSH_DROP.set(this, false);
             case 2 -> AllSynchedDatas.CAPTURE_DROPS.get(this).ifPresent(drops -> {
                 Inventory inventory = ((DeployerPlayer) source.getEntity()).cast().getInventory();
-                drops.forEach(inventory::placeItemBackInInventory);
+                drops.forEach(stack -> InventoryCompat.placeItemBack(inventory, stack));
                 AllSynchedDatas.CAPTURE_DROPS.set(this, Optional.empty());
             });
         }
@@ -205,18 +206,18 @@ public abstract class LivingEntityMixin extends Entity {
         return false;
     }
 
-    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At("HEAD"), cancellable = true)
-    private void swingHand(InteractionHand hand, boolean sendToSwingingEntity, CallbackInfo ci) {
+    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z", at = @At("HEAD"), cancellable = true)
+    private void swingHand(InteractionHand hand, net.minecraft.world.item.component.SwingAnimation animation, boolean sendToSwingingEntity, CallbackInfoReturnable<Boolean> ci) {
         ItemStack stack = getItemInHand(hand);
         if (stack.getItem() instanceof SwingControlItem item) {
             if (item.onEntitySwing(stack, (LivingEntity) (Object) this, hand)) {
-                ci.cancel();
+                ci.setReturnValue(false);
             }
         }
     }
 
-    @Inject(method = "getVisibilityPercent(Lnet/minecraft/world/entity/Entity;)D", at = @At("HEAD"), cancellable = true)
-    private void getAttackDistanceScalingFactor(Entity targetingEntity, CallbackInfoReturnable<Double> cir) {
+    @Inject(method = "getVisibilityPercent(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;)D", at = @At("HEAD"), cancellable = true)
+    private void getAttackDistanceScalingFactor(ServerLevel serverLevel, Entity targetingEntity, CallbackInfoReturnable<Double> cir) {
         if (CardboardArmorHandler.testForStealth(targetingEntity)) {
             cir.setReturnValue(0.0d);
         }

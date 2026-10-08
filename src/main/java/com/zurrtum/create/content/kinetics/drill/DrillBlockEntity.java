@@ -91,7 +91,7 @@ public class DrillBlockEntity extends BlockBreakingKineticBlockEntity {
             }
         }
 
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, breakingPos, Block.getId(stateToBreak));
+        level.levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, breakingPos, Block.getId(stateToBreak));
         return true;
     }
 

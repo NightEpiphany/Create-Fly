@@ -376,7 +376,7 @@ public class WorldSectionElementImpl extends AnimatedSceneElementBase implements
                 BlockStateModel model = blockStateModelSet.get(state);
                 random.setSeed(state.getSeed(pos));
                 WrapperBlockStateModel.addPartsWithInfo(model, world, pos, state, random, parts);
-                queue.submitBreakingBlockModel(poseStack, List.copyOf(parts), entry.getValue());
+                queue.submitBreakingBlockModel(poseStack, List.copyOf(parts), entry.getValue(), false);
                 parts.clear();
                 poseStack.popPose();
             }

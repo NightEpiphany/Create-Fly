@@ -46,7 +46,7 @@ public class SchematicPrinter {
     public enum PrintStage implements StringRepresentable {
         BLOCKS, DEFERRED_BLOCKS, ENTITIES;
 
-        public static final Codec<PrintStage> CODEC = StringRepresentable.fromEnum(PrintStage::values);
+        public static final Codec<PrintStage> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(PrintStage::values);
 
         @Override
         public String getSerializedName() {
@@ -127,7 +127,7 @@ public class SchematicPrinter {
 
         BlockPos extraBounds = StructureTemplate.calculateRelativePosition(
             settings,
-            new BlockPos(activeTemplate.getSize()).offset(-1, -1, -1)
+            BlockPos.ZERO.offset(activeTemplate.getSize()).offset(-1, -1, -1)
         );
         blockReader.setBounds(BBHelper.encapsulate(blockReader.getBounds(), extraBounds));
 

@@ -141,7 +141,10 @@ public class SchematicTableScreen extends AbstractSimiContainerScreen<SchematicT
 
         folderButton = new IconButton(leftPos + 20, y + 21, AllIcons.I_OPEN_FOLDER);
         folderButton.withCallback(() -> {
-            Util.getPlatform().openFile(CreatePaths.SCHEMATICS_DIR.toFile());
+            try {
+                java.awt.Desktop.getDesktop().open(CreatePaths.SCHEMATICS_DIR.toFile());
+            } catch (Exception ignored) {
+            }
         });
         folderButton.setToolTip(folder);
         refreshButton = new IconButton(leftPos + 206, y + 21, AllIcons.I_REFRESH);

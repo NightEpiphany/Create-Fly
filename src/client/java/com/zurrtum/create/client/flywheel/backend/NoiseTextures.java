@@ -1,11 +1,11 @@
 package com.zurrtum.create.client.flywheel.backend;
 
-import com.mojang.blaze3d.GpuFormat;
+import com.mojang.renderpearl.api.GpuFormat;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.GpuDevice;
+import com.mojang.renderpearl.api.device.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.AddressMode;
-import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.AddressMode;
+import com.mojang.renderpearl.api.textures.FilterMode;
 import com.zurrtum.create.client.flywheel.lib.util.ResourceUtil;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.Identifier;
@@ -32,7 +32,7 @@ public class NoiseTextures {
         }
 
         try (var is = optional.get().open()) {
-            var image = NativeImage.read(NativeImage.Format.LUMINANCE, is);
+            var image = NativeImage.read(is);
             BLUE_NOISE = new NoiseTexture(image);
         } catch (IOException e) {
 
@@ -48,7 +48,7 @@ public class NoiseTextures {
             texture = device.createTexture(
                 () -> "Flywheel Blue Noise",
                 5,
-                GpuFormat.R8_UNORM,
+                GpuFormat.RGBA8_UNORM,
                 pixels.getWidth(),
                 pixels.getHeight(),
                 1,

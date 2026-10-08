@@ -277,7 +277,7 @@ public class CartAssemblerBlockEntity extends SmartBlockEntity {
     public enum CartMovementMode implements StringRepresentable {
         ROTATE, ROTATE_PAUSED, ROTATION_LOCKED;
 
-        public static final Codec<CartMovementMode> CODEC = StringRepresentable.fromEnum(CartMovementMode::values);
+        public static final Codec<CartMovementMode> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(CartMovementMode::values);
 
         @Override
         public String getSerializedName() {

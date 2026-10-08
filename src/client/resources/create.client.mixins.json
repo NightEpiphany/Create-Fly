@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_25",
   "client": [
     "AbstractClientPlayerMixin",
+    "PreparedRenderTypeMixin",
     "AvatarRendererMixin",
     "AvatarRenderStateMixin",
     "BlockBreakingRenderStateMixin",
@@ -27,6 +28,7 @@
     "EntityTypeMixin",
     "FluidStateModelSetMixin",
     "FogRendererMixin",
+    "FrontendGpuDeviceAccessor",
     "GameRendererMixin",
     "GlStateManagerMixin",
     "GuiGraphicsExtractorMixin",
@@ -58,8 +60,8 @@
     "ParticleEngineMixin",
     "ParticleResourcesMixin",
     "PlayerModelMixin",
-    "PoseStackMixin",
     "QuadParticleFeatureRendererMixin",
+    "PoseStackMixin",
     "RemotePlayerMixin",
     "RenderPipelineMixin",
     "RenderSystemMixin",
@@ -67,11 +69,10 @@
     "RenderTypeMixin",
     "SectionCompilerMixin",
     "TextureAtlasMixin",
-    "TrimSpriteKeyMixin",
     "WorldOpenFlowsMixin"
   ],
   "plugin": "com.zurrtum.create.client.mixin.MixinPlugin",
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 0
   }
 }

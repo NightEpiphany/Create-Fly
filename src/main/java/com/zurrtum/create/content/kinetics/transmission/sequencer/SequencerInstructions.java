@@ -11,7 +11,7 @@ import java.util.Locale;
 public enum SequencerInstructions implements StringRepresentable {
     TURN_ANGLE, TURN_DISTANCE, DELAY, AWAIT, END;
 
-    public static final Codec<SequencerInstructions> CODEC = StringRepresentable.fromEnum(SequencerInstructions::values);
+    public static final Codec<SequencerInstructions> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(SequencerInstructions::values);
     public static final StreamCodec<ByteBuf, SequencerInstructions> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         SequencerInstructions.class);
 

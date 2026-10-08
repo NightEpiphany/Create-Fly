@@ -1,5 +1,7 @@
 package com.zurrtum.create.content.logistics.box;
 
+import net.minecraft.world.entity.PositionPath;
+import net.minecraft.world.entity.MoveSimulationType;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.AllEntityTypes;
 import com.zurrtum.create.AllSoundEvents;
@@ -121,8 +123,8 @@ public class PackageEntity extends LivingEntity {
     }
 
     @Override
-    public boolean canSimulateMovement() {
-        return true;
+    public MoveSimulationType getMoveSimulationType() {
+        return MoveSimulationType.SERVER_AND_CLIENT;
     }
 
     @Override
@@ -151,13 +153,13 @@ public class PackageEntity extends LivingEntity {
 
         Vec3 clientPos = position().add(motion);
         if (isInterpolating()) {
-            clientPos = VecHelper.lerp(Math.min(1, tickCount / 20.0f), clientPos, getInterpolation().position());
+            clientPos = VecHelper.lerp(Math.min(1, tickCount / 20.0f), clientPos, getClientPosition());
         }
         if (tickCount < 5) {
             setPos(clientPos.x, clientPos.y, clientPos.z);
         }
         if (tickCount < 20) {
-            getInterpolation().interpolateTo(clientPos, getYRot(), getXRot());
+            getInterpolation().interpolateTo(PositionPath.of(clientPos), getYRot(), getXRot(), true);
         }
     }
 

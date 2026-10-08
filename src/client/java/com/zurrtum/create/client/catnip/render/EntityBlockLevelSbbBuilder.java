@@ -74,6 +74,11 @@ public class EntityBlockLevelSbbBuilder extends EntityBlockSbbBuilder implements
         }
 
         @Override
+        public VertexConsumer setUv3(float u, float v) {
+            return this;
+        }
+
+        @Override
         public VertexConsumer setUv2(int u, int v) {
             throw new UnsupportedOperationException("FluidTemplateMeshBuffer only supports addVertex!");
         }

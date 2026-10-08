@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.trains.station;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.*;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import com.zurrtum.create.api.contraption.transformable.TransformableBlockEntity;
@@ -485,7 +486,7 @@ public class StationBlockEntity extends SmartBlockEntity implements Transformabl
             return;
         }
         if (sender != null && sender.getMainHandItem().isEmpty()) {
-            sender.getInventory().placeItemBackInInventory(schedule);
+            InventoryCompat.placeItemBack(sender.getInventory(), schedule);
             return;
         }
 

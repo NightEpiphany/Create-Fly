@@ -24,10 +24,4 @@ public class EmptyJsonOps extends RegistryOps<JsonElement> implements HolderOwne
     public static Ingredient ofTag(TagKey<Item> inputTag) {
         return Ingredient.of(HolderSet.emptyNamed(INSTANCE, inputTag));
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <E> Optional<HolderOwner<E>> owner(ResourceKey<? extends Registry<? extends E>> registryRef) {
-        return Optional.of((HolderOwner<E>) this);
-    }
 }

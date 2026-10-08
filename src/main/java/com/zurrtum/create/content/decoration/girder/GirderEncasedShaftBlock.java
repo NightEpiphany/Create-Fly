@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.decoration.girder;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllItems;
@@ -79,7 +80,7 @@ public class GirderEncasedShaftBlock extends HorizontalAxisKineticBlock implemen
         InteractionResult onWrenched = super.onWrenched(state, context);
         Player player = context.getPlayer();
         if (onWrenched == InteractionResult.SUCCESS && player != null && !player.isCreative()) {
-            player.getInventory().placeItemBackInInventory(AllItems.SHAFT.getDefaultInstance());
+            InventoryCompat.placeItemBack(player.getInventory(), AllItems.SHAFT.getDefaultInstance());
         }
         return onWrenched;
     }

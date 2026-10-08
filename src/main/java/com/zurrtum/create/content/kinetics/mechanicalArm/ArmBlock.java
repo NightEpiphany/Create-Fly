@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.mechanicalArm;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllShapes;
@@ -127,7 +128,7 @@ public class ArmBlock extends KineticBlock implements IBE<ArmBlockEntity>, ICogW
                 if (level.isClientSide()) {
                     return;
                 }
-                player.getInventory().placeItemBackInInventory(be.heldItem);
+                InventoryCompat.placeItemBack(player.getInventory(), be.heldItem);
                 be.heldItem = ItemStack.EMPTY;
                 be.phase = Phase.SEARCH_INPUTS;
                 be.setChanged();

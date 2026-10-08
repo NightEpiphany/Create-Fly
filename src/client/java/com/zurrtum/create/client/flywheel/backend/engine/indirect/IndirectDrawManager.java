@@ -262,7 +262,9 @@ public class IndirectDrawManager extends DrawManager<IndirectInstancer<?>> {
 
                         cullingGroup.bindForCrumbling(crumblingMaterial);
 
-                        MaterialRenderState.setup(crumblingMaterial);
+                        if (!MaterialRenderState.setup(crumblingMaterial)) {
+                            continue;
+                        }
 
                         // Upload the draw command.
                         draw.writeWithOverrides(block.ptr(), instanceIndex, crumblingMaterial);

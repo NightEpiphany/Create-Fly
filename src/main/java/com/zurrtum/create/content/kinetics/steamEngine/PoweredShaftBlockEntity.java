@@ -40,7 +40,7 @@ public class PoweredShaftBlockEntity extends GeneratingKineticBlockEntity {
         float prev = engineEfficiency;
         engineEfficiency = efficiency;
         int prevDirection = movementDirection;
-        if (Mth.equal(efficiency, prev) && prevDirection == direction) {
+        if (Mth.equal(efficiency, prev) && prevDirection == direction && capacityKey != null) {
             return;
         }
 

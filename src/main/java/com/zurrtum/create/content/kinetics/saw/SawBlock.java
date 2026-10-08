@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.saw;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.*;
 import com.zurrtum.create.catnip.placement.IPlacementHelper;
 import com.zurrtum.create.catnip.placement.PlacementHelpers;
@@ -168,7 +169,7 @@ public class SawBlock extends DirectionalAxisKineticBlock implements IBE<SawBloc
                         if (heldItemStack.isEmpty()) {
                             continue;
                         }
-                        player.getInventory().placeItemBackInInventory(heldItemStack);
+                        InventoryCompat.placeItemBack(player.getInventory(), heldItemStack);
                     }
                 }
                 be.inventory.clearContent();

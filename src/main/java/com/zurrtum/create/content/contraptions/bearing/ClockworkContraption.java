@@ -145,7 +145,7 @@ public class ClockworkContraption extends Contraption {
     public enum HandType implements StringRepresentable {
         HOUR, MINUTE;
 
-        public static final Codec<HandType> CODEC = StringRepresentable.fromEnum(HandType::values);
+        public static final Codec<HandType> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(HandType::values);
 
         @Override
         public String getSerializedName() {

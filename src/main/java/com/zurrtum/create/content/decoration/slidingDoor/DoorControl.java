@@ -13,7 +13,7 @@ public enum DoorControl implements StringRepresentable {
 
     ALL, NORTH, EAST, SOUTH, WEST, NONE;
 
-    public static final Codec<DoorControl> CODEC = StringRepresentable.fromEnum(DoorControl::values);
+    public static final Codec<DoorControl> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(DoorControl::values);
     public static final StreamCodec<ByteBuf, DoorControl> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(DoorControl.class);
 
     @Override

@@ -1,7 +1,7 @@
 package com.zurrtum.create.client.catnip.gui.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.FilterMode;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.catnip.render.CachedBuffers;
 import net.minecraft.client.gui.render.TextureSetup;
@@ -67,7 +67,7 @@ public class PartialElementRenderer extends PictureInPictureRenderer<PartialRend
             partial.transform(matrices);
             CachedBuffers.partial(partial.model, Blocks.AIR.defaultBlockState()).submit(matrices, submitNodeStorage);
             matrices.popPose();
-            featureRenderDispatcher.renderAllFeatures(submitNodeStorage);
+            texture.renderFeatures(featureRenderDispatcher, submitNodeStorage);
             texture.clear();
         }
         state.addBlitToCurrentLayer(new BlitRenderState(

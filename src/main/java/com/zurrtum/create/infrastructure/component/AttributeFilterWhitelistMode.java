@@ -11,7 +11,7 @@ import java.util.Locale;
 public enum AttributeFilterWhitelistMode implements StringRepresentable {
     WHITELIST_DISJ, WHITELIST_CONJ, BLACKLIST;
 
-    public static final Codec<AttributeFilterWhitelistMode> CODEC = StringRepresentable.fromEnum(
+    public static final Codec<AttributeFilterWhitelistMode> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(
         AttributeFilterWhitelistMode::values);
     public static final StreamCodec<ByteBuf, AttributeFilterWhitelistMode> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         AttributeFilterWhitelistMode.class);

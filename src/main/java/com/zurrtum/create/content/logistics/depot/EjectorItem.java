@@ -26,21 +26,13 @@ public class EjectorItem extends BlockItem {
         if (player != null && player.isShiftKeyDown()) {
             return InteractionResult.SUCCESS;
         }
-        return super.useOn(ctx);
-    }
-
-    @Override
-    protected boolean updateCustomBlockEntityTag(
-        BlockPos pos,
-        Level world,
-        @Nullable Player player,
-        ItemStack p_195943_4_,
-        BlockState p_195943_5_
-    ) {
-        if (!world.isClientSide() && player instanceof ServerPlayer sp) {
-            sp.connection.send(new EjectorPlacementRequestPacket(pos));
+        BlockPos placePos = new net.minecraft.world.item.context.BlockPlaceContext(ctx).getClickedPos();
+        InteractionResult result = super.useOn(ctx);
+        // 26.3: BlockItem.updateCustomBlockEntityTag is static and no longer a hook
+        if (result.consumesAction() && !ctx.getLevel().isClientSide() && ctx.getPlayer() instanceof ServerPlayer sp) {
+            sp.connection.send(new EjectorPlacementRequestPacket(placePos));
         }
-        return super.updateCustomBlockEntityTag(pos, world, player, p_195943_4_, p_195943_5_);
+        return result;
     }
 
     @Override

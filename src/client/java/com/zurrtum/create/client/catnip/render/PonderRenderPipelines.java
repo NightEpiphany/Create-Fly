@@ -1,12 +1,12 @@
 package com.zurrtum.create.client.catnip.render;
 
-import com.mojang.blaze3d.PrimitiveTopology;
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.ColorTargetState;
-import com.mojang.blaze3d.pipeline.DepthStencilState;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.pipeline.RenderPipeline.Snippet;
-import com.mojang.blaze3d.platform.CompareOp;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.DepthStencilState;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline.Snippet;
+import com.mojang.renderpearl.api.pipeline.CompareOp;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -33,11 +33,11 @@ public class PonderRenderPipelines {
         .withPrimitiveTopology(PrimitiveTopology.QUADS).withDepthStencilState(DepthStencilState.DEFAULT).buildSnippet();
     public static final RenderPipeline ENTITY_BLOCK_SOLID = register(
         "entity_block_solid",
-        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withShaderDefine("OVERWORLD")
+        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("OVERWORLD")
     );
     public static final RenderPipeline ENTITY_BLOCK_CUTOUT = register(
         "entity_block_cutout",
-        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withShaderDefine("OVERWORLD")
+        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("OVERWORLD")
             .withShaderDefine("ALPHA_CUTOUT", 0.5F)
     );
     public static final RenderPipeline ENTITY_BLOCK_TRANSLUCENT = register(
@@ -48,11 +48,11 @@ public class PonderRenderPipelines {
     );
     public static final RenderPipeline ENTITY_BLOCK_LIGHT_SOLID = register(
         "entity_block_light_solid",
-        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET)
+        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT)
     );
     public static final RenderPipeline ENTITY_BLOCK_LIGHT_CUTOUT = register(
         "entity_block_light_cutout",
-        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withShaderDefine("ALPHA_CUTOUT", 0.5F)
+        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("ALPHA_CUTOUT", 0.5F)
     );
     public static final RenderPipeline ENTITY_BLOCK_LIGHT_TRANSLUCENT = register(
         "entity_block_light_translucent",
@@ -61,11 +61,11 @@ public class PonderRenderPipelines {
     );
     public static final RenderPipeline NETHER_ENTITY_BLOCK_SOLID = register(
         "nether_entity_block_solid",
-        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withShaderDefine("NETHER")
+        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("NETHER")
     );
     public static final RenderPipeline NETHER_ENTITY_BLOCK_CUTOUT = register(
         "nether_entity_block_cutout",
-        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withShaderDefine("NETHER").withShaderDefine("ALPHA_CUTOUT", 0.5F)
+        RenderPipeline.builder(ENTITY_BLOCK_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("NETHER").withShaderDefine("ALPHA_CUTOUT", 0.5F)
     );
     public static final RenderPipeline NETHER_ENTITY_BLOCK_TRANSLUCENT = register(
         "nether_entity_block_translucent",
@@ -74,11 +74,11 @@ public class PonderRenderPipelines {
     );
     public static final RenderPipeline NETHER_ENTITY_BLOCK_LIGHT_SOLID = register(
         "nether_entity_block_light_solid",
-        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withShaderDefine("NETHER_LIGHT")
+        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("NETHER_LIGHT")
     );
     public static final RenderPipeline NETHER_ENTITY_BLOCK_LIGHT_CUTOUT = register(
         "nether_entity_block_light_cutout",
-        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withShaderDefine("NETHER_LIGHT")
+        RenderPipeline.builder(ENTITY_BLOCK_LIGHT_SNIPPET).withColorTargetState(ColorTargetState.DEFAULT).withShaderDefine("NETHER_LIGHT")
             .withShaderDefine("ALPHA_CUTOUT", 0.5F)
     );
     public static final RenderPipeline NETHER_ENTITY_BLOCK_LIGHT_TRANSLUCENT = register(
@@ -114,7 +114,7 @@ public class PonderRenderPipelines {
     public static final RenderPipeline POSITION_COLOR_TRIANGLES = register(
         "position_color_triangles",
         RenderPipeline.builder(RenderPipelines.GLOBALS_SNIPPET)
-            .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION).withVertexShader("core/position_color")
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS).withBindGroupLayout(BindGroupLayouts.PROJECTION).withVertexShader("core/position_color")
             .withFragmentShader("core/position_color")
             .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
             .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR).withPrimitiveTopology(PrimitiveTopology.TRIANGLES)

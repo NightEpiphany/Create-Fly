@@ -15,7 +15,13 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeManager.IngredientExtractor;
 import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipePropertySet;
+import com.zurrtum.create.foundation.recipe.GeneratedRecipes;
+import net.minecraft.world.flag.FeatureFlagSet;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -27,15 +33,18 @@ import java.util.stream.Stream;
 
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
-    @Inject(method = "prepare(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)Lnet/minecraft/world/item/crafting/RecipeMap;", at = @At(value = "INVOKE", target = "Ljava/util/SortedMap;size()I"))
-    private void addSequencedAssemblyRecipe(
-        ResourceManager manager,
-        ProfilerFiller profiler,
-        CallbackInfoReturnable<RecipeMap> cir,
-        @Local SortedMap<Identifier, Recipe<?>> recipes
-    ) {
-        recipes.putAll(SequencedAssemblyRecipe.GENERATE_RECIPES);
-        PotionRecipe.register(recipes);
+    @Shadow
+    @Mutable
+    @Final
+    public RecipeMap recipes;
+
+    /**
+     * Item components are bound by the time recipes are finalized, so the vanilla brewing recipes can be tested
+     * against potion stacks here to derive the mixer potion recipes.
+     */
+    @Inject(method = "finalizeRecipeLoading(Lnet/minecraft/world/flag/FeatureFlagSet;)V", at = @At("HEAD"))
+    private void addPotionRecipes(FeatureFlagSet enabledFlags, CallbackInfo ci) {
+        this.recipes = GeneratedRecipes.merge(this.recipes, PotionRecipe.generate(this.recipes.values()));
     }
 
     @WrapOperation(method = "finalizeRecipeLoading(Lnet/minecraft/world/flag/FeatureFlagSet;)V", at = @At(value = "INVOKE", target = "Ljava/util/Set;stream()Ljava/util/stream/Stream;"))

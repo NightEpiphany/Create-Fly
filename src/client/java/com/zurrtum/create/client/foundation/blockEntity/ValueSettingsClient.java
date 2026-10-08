@@ -98,7 +98,7 @@ public class ValueSettingsClient {
         }
 
         if (interactHeldTicks > 3) {
-            player.swinging = false;
+            // TODO 26.3: player.swinging removed
         }
         if (interactHeldTicks++ < 5) {
             return;

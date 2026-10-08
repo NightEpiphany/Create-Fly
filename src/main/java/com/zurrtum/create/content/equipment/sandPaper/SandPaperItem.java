@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.equipment.sandPaper;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.AllRecipeSets;
 import com.zurrtum.create.AllRecipeTypes;
@@ -7,6 +8,10 @@ import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.infrastructure.component.SandPaperItemComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.BlockTransformer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -146,11 +151,11 @@ public class SandPaperItem extends Item {
                 ItemStack polished = recipe.value().assemble(input);
                 Inventory playerInv = player.getInventory();
                 if (!polished.isEmpty()) {
-                    playerInv.placeItemBackInInventory(polished);
+                    InventoryCompat.placeItemBack(playerInv, polished);
                 }
                 ItemStackTemplate recipeRemainder = toPolish.getItem().getCraftingRemainder();
                 if (recipeRemainder != null) {
-                    playerInv.placeItemBackInInventory(recipeRemainder.create());
+                    InventoryCompat.placeItemBack(playerInv, recipeRemainder.create());
                 }
             });
 
@@ -182,10 +187,31 @@ public class SandPaperItem extends Item {
         if (stack.has(AllDataComponents.SAND_PAPER_POLISHING)) {
             ItemStack toPolish = stack.get(AllDataComponents.SAND_PAPER_POLISHING).item();
             //noinspection DataFlowIssue - toPolish won't be null as we do call .has before calling .get
-            player.getInventory().placeItemBackInInventory(toPolish);
+            InventoryCompat.placeItemBack(player.getInventory(), toPolish);
             stack.remove(AllDataComponents.SAND_PAPER_POLISHING);
         }
         return false;
+    }
+
+    /**
+     * 26.3: AxeItem.getStripped no longer exists, stripping is a BlockTransformer data component on axes.
+     * Only the resulting state is computed here, the sandpaper handles damage, sound and particles itself.
+     */
+    private static Optional<BlockState> getStripped(Level level, BlockPos pos, Direction face) {
+        Holder<BlockTransformer> holder = new ItemStack(Items.IRON_AXE).get(DataComponents.BLOCK_TRANSFORMER);
+        if (holder == null) {
+            return Optional.empty();
+        }
+        for (BlockTransformer.BlockTransformData data : holder.value().transforms()) {
+            if (data.disallowedFaces().contains(face)) {
+                continue;
+            }
+            BlockState result = data.blockStateProvider().value().getOptionalState(level, level.getRandom(), pos);
+            if (result != null) {
+                return Optional.of(result);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -196,7 +222,7 @@ public class SandPaperItem extends Item {
         BlockPos pos = context.getClickedPos();
         BlockState state = level.getBlockState(pos);
 
-        Optional<BlockState> newState = ((AxeItem) Items.DIAMOND_AXE).getStripped(state);
+        Optional<BlockState> newState = getStripped(level, pos, context.getClickedFace());
         if (newState.isPresent()) {
             AllSoundEvents.SANDING_LONG.play(
                 level,

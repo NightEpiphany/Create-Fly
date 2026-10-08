@@ -67,9 +67,9 @@ public final class ModelUtil {
         ITEM_CHUNK_MATERIALS.put(RenderTypes.translucentMovingBlock(), ENTITY_MATERIALS[10]);
         ITEM_CHUNK_MATERIALS.put(Sheets.translucentBlockItemSheet(), Materials.TRANSLUCENT_ITEM_ENTITY_BLOCK);
         ITEM_CHUNK_MATERIALS.put(Sheets.translucentItemSheet(), Materials.TRANSLUCENT_ITEM_ENTITY_ITEM);
-        ITEM_CHUNK_MATERIALS.put(RenderTypes.glint(), Materials.GLINT);
-        ITEM_CHUNK_MATERIALS.put(RenderTypes.glintTranslucent(), Materials.GLINT);
-        ITEM_CHUNK_MATERIALS.put(RenderTypes.entityGlint(), Materials.GLINT_ENTITY);
+        ITEM_CHUNK_MATERIALS.put(RenderTypes.itemCutoutGlint(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS), Materials.GLINT);
+        ITEM_CHUNK_MATERIALS.put(RenderTypes.itemTranslucentGlint(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS), Materials.GLINT);
+        ITEM_CHUNK_MATERIALS.put(RenderTypes.entitySolidGlint(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS), Materials.GLINT_ENTITY);
     }
 
     private ModelUtil() {

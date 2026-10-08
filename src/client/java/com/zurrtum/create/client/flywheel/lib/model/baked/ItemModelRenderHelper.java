@@ -35,7 +35,7 @@ public class ItemModelRenderHelper {
     ) {
         LayerRenderState layer = state.newLayer();
         settings.applyToLayer(layer, displayContext);
-        layer.prepareQuadList().addAll(quads);
+        layer.setQuads(net.minecraft.client.resources.model.geometry.ItemQuads.split(quads));
         return layer;
     }
 
@@ -93,7 +93,7 @@ public class ItemModelRenderHelper {
                 overlayCoords,
                 outlineColor,
                 tints,
-                quads,
+                net.minecraft.client.resources.model.geometry.ItemQuads.split(quads),
                 FoilType.NONE
             );
         }

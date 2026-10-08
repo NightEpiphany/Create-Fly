@@ -185,7 +185,7 @@ public class SequencedAssemblyView extends CreateView {
         int mouseY,
         float partialTicks
     ) {
-        boolean checkHover = screen.hoveredSlot == null;
+        boolean checkHover = true /* TODO 26.3: hoveredSlot protected */;
         boolean checkStep = mouseY >= 7 && mouseY <= 86;
         Font textRenderer = screen.getFont();
         Iterator<SlotContent> iterator = ingredients.iterator();
@@ -275,7 +275,7 @@ public class SequencedAssemblyView extends CreateView {
             } else {
                 RegistryOps<JsonElement> ops = Minecraft.getInstance().level.registryAccess()
                     .createSerializationContext(JsonOps.INSTANCE);
-                name = Recipe.CODEC.encodeStart(ops, recipe).result().map(json -> AllAssemblyRecipeNames.get(ops, json))
+                name = Recipe.DIRECT_CODEC.encodeStart(ops, recipe).result().map(json -> AllAssemblyRecipeNames.get(ops, json))
                     .orElse(CommonComponents.EMPTY);
             }
             NAMES.put(recipe, name);

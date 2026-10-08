@@ -1,6 +1,6 @@
 package com.zurrtum.create.content.contraptions.mounted;
 
-import com.mojang.serialization.MapCodec;
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllShapes;
@@ -69,8 +69,6 @@ public class CartAssemblerBlock extends BaseRailBlock implements IBE<CartAssembl
         "rail_type",
         CartAssembleRailType.class
     );
-
-    public static final MapCodec<CartAssemblerBlock> CODEC = simpleCodec(CartAssemblerBlock::new);
 
     public CartAssemblerBlock(Properties properties) {
         super(true, properties);
@@ -182,7 +180,7 @@ public class CartAssemblerBlock extends BaseRailBlock implements IBE<CartAssembl
 
             if (!player.isCreative()) {
                 stack.shrink(1);
-                player.getInventory().placeItemBackInInventory(new ItemStack(previousItem));
+                InventoryCompat.placeItemBack(player.getInventory(), new ItemStack(previousItem));
             }
             return InteractionResult.SUCCESS;
         }
@@ -300,7 +298,7 @@ public class CartAssemblerBlock extends BaseRailBlock implements IBE<CartAssembl
                 world.getBlockEntity(pos),
                 player,
                 context.getItemInHand()
-            ).forEach(itemStack -> player.getInventory().placeItemBackInInventory(itemStack));
+            ).forEach(itemStack -> InventoryCompat.placeItemBack(player.getInventory(), itemStack));
         }
         if (world instanceof ServerLevel) {
             state.spawnAfterBreak((ServerLevel) world, pos, ItemStack.EMPTY, true);
@@ -385,10 +383,5 @@ public class CartAssemblerBlock extends BaseRailBlock implements IBE<CartAssembl
             return Direction.WEST;
         }
         return Direction.NORTH;
-    }
-
-    @Override
-    protected MapCodec<? extends BaseRailBlock> codec() {
-        return CODEC;
     }
 }

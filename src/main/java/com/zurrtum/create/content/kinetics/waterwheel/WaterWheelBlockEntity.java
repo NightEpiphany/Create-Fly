@@ -107,7 +107,7 @@ public class WaterWheelBlockEntity extends GeneratingKineticBlockEntity {
         }
         this.material = material;
         notifyUpdate();
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, worldPosition, Block.getId(material));
+        level.levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, worldPosition, Block.getId(material));
         return InteractionResult.SUCCESS;
     }
 
@@ -207,7 +207,7 @@ public class WaterWheelBlockEntity extends GeneratingKineticBlockEntity {
         flowScore = view.getIntOr("FlowScore", 0);
 
         BlockState prevMaterial = material;
-        Optional<BlockState> material = view.read("Material", BlockState.CODEC);
+        Optional<BlockState> material = view.read("Material", com.zurrtum.create.foundation.codec.CreateCodecs.BLOCK_STATE_COMPAT);
         if (material.isEmpty()) {
             return;
         }
@@ -225,14 +225,14 @@ public class WaterWheelBlockEntity extends GeneratingKineticBlockEntity {
     @Override
     public void writeSafe(ValueOutput view) {
         super.writeSafe(view);
-        view.store("Material", BlockState.CODEC, material);
+        view.store("Material", com.zurrtum.create.foundation.codec.CreateCodecs.BLOCK_STATE_COMPAT, material);
     }
 
     @Override
     public void write(ValueOutput view, boolean clientPacket) {
         super.write(view, clientPacket);
         view.putInt("FlowScore", flowScore);
-        view.store("Material", BlockState.CODEC, material);
+        view.store("Material", com.zurrtum.create.foundation.codec.CreateCodecs.BLOCK_STATE_COMPAT, material);
     }
 
     @Override

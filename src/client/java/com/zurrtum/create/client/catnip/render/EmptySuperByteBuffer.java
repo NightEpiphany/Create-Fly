@@ -340,6 +340,11 @@ class EmptySuperByteBuffer extends SuperByteBuffer {
     }
 
     @Override
+    public SuperByteBuffer keepAlive() {
+        return this;
+    }
+
+    @Override
     public SuperByteBuffer disableDiffuse() {
         return this;
     }

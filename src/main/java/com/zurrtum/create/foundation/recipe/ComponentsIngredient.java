@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
@@ -72,24 +73,20 @@ public class ComponentsIngredient extends Ingredient {
         }
 
         // None strict matching
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : components.entrySet()) {
-            final DataComponentType<?> type = entry.getKey();
-            final Optional<?> value = entry.getValue();
-
-            if (value.isPresent()) {
-                // Expect the stack to contain a matching component
-                if (!stack.has(type)) {
-                    return false;
-                }
-
-                if (!Objects.equals(value.get(), stack.get(type))) {
-                    return false;
-                }
-            } else {
-                // Expect the target stack to not contain this component
-                if (stack.has(type)) {
-                    return false;
-                }
+        DataComponentPatch.SplitResult split = components.split();
+        for (TypedDataComponent<?> component : split.added()) {
+            // Expect the stack to contain a matching component
+            if (!stack.has(component.type())) {
+                return false;
+            }
+            if (!Objects.equals(component.value(), stack.get(component.type()))) {
+                return false;
+            }
+        }
+        for (DataComponentType<?> type : split.removed()) {
+            // Expect the target stack to not contain this component
+            if (stack.has(type)) {
+                return false;
             }
         }
 

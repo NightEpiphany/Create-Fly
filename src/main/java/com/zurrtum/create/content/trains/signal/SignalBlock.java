@@ -36,7 +36,7 @@ public class SignalBlock extends Block implements IBE<SignalBlockEntity>, IWrenc
 
     public enum SignalType implements StringRepresentable {
         ENTRY_SIGNAL, CROSS_SIGNAL;
-        public static final Codec<SignalType> CODEC = StringRepresentable.fromEnum(SignalType::values);
+        public static final Codec<SignalType> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(SignalType::values);
 
         @Override
         public String getSerializedName() {

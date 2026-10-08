@@ -37,21 +37,16 @@ public class ClipboardBlockItem extends BlockItem implements SupportsItemCopying
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(
-        BlockPos pPos,
-        Level pLevel,
-        @Nullable Player pPlayer,
-        ItemStack pStack,
-        BlockState pState
-    ) {
-        if (pLevel.isClientSide()) {
-            return false;
+    public InteractionResult place(net.minecraft.world.item.context.BlockPlaceContext ctx) {
+        InteractionResult result = super.place(ctx);
+        // 26.3: BlockItem.updateCustomBlockEntityTag is static now; refresh the clipboard after placement.
+        Level level = ctx.getLevel();
+        if (result.consumesAction() && !level.isClientSide()) {
+            if (level.getBlockEntity(ctx.getClickedPos()) instanceof ClipboardBlockEntity cbe) {
+                cbe.notifyUpdate();
+            }
         }
-        if (!(pLevel.getBlockEntity(pPos) instanceof ClipboardBlockEntity cbe)) {
-            return false;
-        }
-        cbe.notifyUpdate();
-        return true;
+        return result;
     }
 
     @Override

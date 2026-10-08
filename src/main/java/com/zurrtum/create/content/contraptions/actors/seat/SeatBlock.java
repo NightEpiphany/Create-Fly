@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.contraptions.actors.seat;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.google.common.base.Optional;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllEntityTags;
@@ -174,7 +175,7 @@ public class SeatBlock extends Block implements ProperWaterloggedBlock, EntityCo
             ((Leashable) leashed.get()).removeLeash();
             Inventory playerInventory = player.getInventory();
             if (!player.isCreative() || playerInventory.findSlotMatchingItem(stack) == -1) {
-                playerInventory.placeItemBackInInventory(new ItemStack(Items.LEAD));
+                InventoryCompat.placeItemBack(playerInventory, new ItemStack(Items.LEAD));
             }
         }
         sitDown(level, pos, leashed.or(player));

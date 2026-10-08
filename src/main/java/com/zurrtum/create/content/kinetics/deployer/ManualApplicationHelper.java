@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.deployer;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllAdvancements;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllRecipeSets;
@@ -100,7 +101,7 @@ public class ManualApplicationHelper {
                     if (heldItem.isEmpty()) {
                         player.setItemInHand(hand, itemStack);
                     } else if (!player.getInventory().add(itemStack)) {
-                        player.drop(itemStack, false);
+                        InventoryCompat.drop(player, itemStack, false);
                     }
                 }
             }

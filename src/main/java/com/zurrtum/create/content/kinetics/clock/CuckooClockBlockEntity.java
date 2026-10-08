@@ -15,7 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.clock.ClockTimeMarker;
 import net.minecraft.world.clock.ClockTimeMarkers;
-import net.minecraft.world.clock.ServerClockManager.ClockInstance;
+import net.minecraft.world.clock.ServerClockManager.ServerClockInstance;
 import net.minecraft.world.clock.WorldClocks;
 import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,7 +34,7 @@ public class CuckooClockBlockEntity extends KineticBlockEntity {
 
     public enum Animation implements StringRepresentable {
         PIG, CREEPER, SURPRISE, NONE;
-        public static final Codec<Animation> CODEC = StringRepresentable.fromEnum(Animation::values);
+        public static final Codec<Animation> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(Animation::values);
 
         @Override
         public String getSerializedName() {
@@ -82,7 +82,7 @@ public class CuckooClockBlockEntity extends KineticBlockEntity {
         if (animationType == Animation.NONE) {
             level.dimensionType().defaultClock().or(() -> level.registryAccess().get(WorldClocks.OVERWORLD))
                 .ifPresent(clock -> {
-                    ClockInstance instance = ((ServerLevel) level).clockManager().getInstance(clock);
+                    ServerClockInstance instance = ((ServerLevel) level).clockManager().getInstance(clock);
                     Map<ResourceKey<ClockTimeMarker>, ClockTimeMarker> timeMarkers = instance.timeMarkers;
                     ClockTimeMarker marker = timeMarkers.get(ClockTimeMarkers.NOON);
                     long totalTicks = instance.totalTicks;

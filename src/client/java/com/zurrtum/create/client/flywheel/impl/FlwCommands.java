@@ -163,9 +163,7 @@ public final class FlwCommands {
                         player.getRotationVector(),
                         null,
                         null,
-                        null,
-                        null,
-                        null,
+                        net.minecraft.network.chat.Component.empty(),
                         null
                     ));
                     int value = IntegerArgumentType.getInteger(context, "stage");

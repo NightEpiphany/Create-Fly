@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.logistics.box;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.AllEntityTypes;
 import com.zurrtum.create.AllSoundEvents;
@@ -337,7 +338,7 @@ public class PackageItem extends Item implements EntityItem {
                     }
                 }
 
-                playerIn.getInventory().placeItemBackInInventory(itemstack.copy());
+                InventoryCompat.placeItemBack(playerIn.getInventory(), itemstack.copy());
             }
         }
 

@@ -28,7 +28,7 @@ public class SignalBlockEntity extends SmartBlockEntity implements Transformable
 
     public enum OverlayState implements StringRepresentable {
         RENDER, SKIP, DUAL;
-        public static final Codec<OverlayState> CODEC = StringRepresentable.fromEnum(OverlayState::values);
+        public static final Codec<OverlayState> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(OverlayState::values);
 
         @Override
         public String getSerializedName() {
@@ -39,7 +39,7 @@ public class SignalBlockEntity extends SmartBlockEntity implements Transformable
     public enum SignalState implements StringRepresentable {
         RED, YELLOW, GREEN, INVALID;
 
-        public static final Codec<SignalState> CODEC = StringRepresentable.fromEnum(SignalState::values);
+        public static final Codec<SignalState> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(SignalState::values);
 
         @Override
         public String getSerializedName() {

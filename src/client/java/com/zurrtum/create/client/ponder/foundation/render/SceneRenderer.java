@@ -2,7 +2,8 @@ package com.zurrtum.create.client.ponder.foundation.render;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.renderpearl.api.commands.RenderPass;
+import com.mojang.renderpearl.api.textures.FilterMode;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,6 +15,8 @@ import com.zurrtum.create.client.ponder.foundation.PonderScene;
 import com.zurrtum.create.client.ponder.foundation.PonderScene.SceneTransform;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
@@ -79,14 +82,24 @@ public class SceneRenderer extends PictureInPictureRenderer<SceneRenderState> {
             QuadParticleFeatureRenderer.TYPE);
         Matrix4f particleTransforms = RenderSystem.getModelViewMatrixCopy().mul(matrices.last().pose());
         particle.ponder$updateTransforms(RenderSystem.getDynamicUniforms().writeTransform(particleTransforms));
-        try (FeatureRenderDispatcher.PreparedFrame frame = featureRenderDispatcher.prepareFrame(submitNodeStorage)) {
-            frame.executeSolid();
-            frame.executeTranslucent();
-            frame.executeOutline();
-            frame.executeTranslucentAfterTerrain();
-            frame.executeAlwaysOnTop();
+        RenderSystem.getModelViewStack().pushMatrix();
+        try (
+            FeatureRenderDispatcher.PreparedFrame frame = featureRenderDispatcher.prepareFrame(submitNodeStorage);
+            RenderPass renderPass = RenderSystem.getDevice().createCommandEncoder().createRenderPass(
+                () -> "Ponder scene",
+                texture.textureView(),
+                Optional.empty(),
+                texture.depthTextureView(),
+                OptionalDouble.empty()
+            )
+        ) {
+            RenderSystem.bindDefaultUniforms(renderPass);
+            FeatureRenderDispatcher.renderAllFeatures(renderPass, frame);
+            frame.executeOutline(renderPass);
+        } finally {
+            RenderSystem.getModelViewStack().popMatrix();
+            particle.ponder$updateTransforms(null);
         }
-        particle.ponder$updateTransforms(null);
         scene.resetParticles();
         lighting.updateLevel(mc.level.dimensionType().cardinalLightType());
         gameRenderer.useUiLightmap = lightOption;

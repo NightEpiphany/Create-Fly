@@ -93,7 +93,8 @@ public class ExtendoGripRenderHandler {
             msr.rotateYDegrees(flip * 40.0F);
             ms.translate(flip * 0.05f, -0.3f, -0.3f);
 
-            AvatarRenderer<AbstractClientPlayer> playerrenderer = entityRenderDispatcher.getPlayerRenderer(player);
+            @SuppressWarnings("unchecked")
+            AvatarRenderer<AbstractClientPlayer> playerrenderer = (AvatarRenderer<AbstractClientPlayer>) entityRenderDispatcher.getRenderer(player);
             Identifier texture = player.getSkin().body().texturePath();
             if (rightHand) {
                 playerrenderer.renderRightHand(
@@ -139,11 +140,11 @@ public class ExtendoGripRenderHandler {
     }
 
     private static ItemStack getRenderedMainHandStack(Minecraft mc) {
-        return mc.getEntityRenderDispatcher().getItemInHandRenderer().mainHandItem;
+        return mc.player.getMainHandItem();
     }
 
     private static ItemStack getRenderedOffHandStack(Minecraft mc) {
-        return mc.getEntityRenderDispatcher().getItemInHandRenderer().offHandItem;
+        return mc.player.getOffhandItem();
     }
 
 }

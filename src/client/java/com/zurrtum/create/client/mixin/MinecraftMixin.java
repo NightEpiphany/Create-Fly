@@ -1,5 +1,6 @@
 package com.zurrtum.create.client.mixin;
 
+import net.minecraft.world.item.component.SwingAnimation;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -129,7 +130,7 @@ public abstract class MinecraftMixin {
         FlwImpl.freezeRegistries();
     }
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Window;updateRawMouseInput(Z)V"))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;registerReloadListeners"))
     private void register(GameConfig gameConfig, CallbackInfo ci) {
         if (RenderSystem.getDevice().getDeviceInfo().backendName().equals("OpenGL")) {
             resourceManager.registerReloadListener(FlwProgramsReloader.INSTANCE);
@@ -148,6 +149,11 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "tick()V", at = @At("HEAD"))
     private void tickPre(CallbackInfo ci) {
+        // Fallback: GameRendererMixin#recycleAll may not apply on 26.3 (renderLevel changed), which leaks layers.
+        // Frames are fully rendered between ticks, so recycling here is safe (idempotent).
+        com.zurrtum.create.client.catnip.render.EntityBlockLightLayer.recycleAll();
+        com.zurrtum.create.client.catnip.render.EntityBlockLayer.recycleAll();
+        com.zurrtum.create.client.catnip.render.EntityBlockMultipleLayer.recycleAll();
         Minecraft mc = (Minecraft) (Object) this;
         AnimationTickHolder.tick(mc);
         PonderTooltipHandler.tick();
@@ -221,7 +227,7 @@ public abstract class MinecraftMixin {
         SymmetryHandlerClient.onClientTick(mc);
     }
 
-    @Inject(method = "renderFrame(Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;render(Lnet/minecraft/client/DeltaTracker;Z)V"))
+    @Inject(method = "renderFrame(Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;render()V"))
     private void render(boolean advanceGameTime, CallbackInfo ci) {
         TurntableHandler.gameRenderFrame((Minecraft) (Object) this);
     }
@@ -243,7 +249,7 @@ public abstract class MinecraftMixin {
         ) || FactoryPanelConnectionHandler.onRightClick(mc) || ChainConveyorConnectionHandler.onRightClick(mc) || TrainRelocatorClient.onClicked(
             mc) || ChainConveyorInteractionHandler.onUse(mc) || PackagePortTargetSelectionHandler.onUse(mc) || ChainPackageInteractionHandler.onUse(
             mc))) {
-            player.swing(InteractionHand.MAIN_HAND);
+            player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
             ci.cancel();
         } else if (ContraptionHandlerClient.rightClickingOnContraptionsGetsHandledLocally(mc, hand)) {
             ci.cancel();
@@ -271,7 +277,7 @@ public abstract class MinecraftMixin {
     private void doAttack(CallbackInfoReturnable<Boolean> cir) {
         Minecraft mc = (Minecraft) (Object) this;
         if (CurvedTrackInteraction.onClickInput(mc, true) || Create.GLUE_HANDLER.onMouseInput(mc, true)) {
-            player.swing(InteractionHand.MAIN_HAND);
+            player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
             cir.setReturnValue(false);
         }
     }

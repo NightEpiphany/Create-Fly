@@ -1,6 +1,6 @@
 package com.zurrtum.create.client.flywheel.lib.model.baked;
 
-import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zurrtum.create.client.flywheel.api.material.Material;
@@ -34,10 +34,14 @@ public class BakedItemModelBufferer {
     static final List<RenderType> CHUNK_LAYERS = List.of(
         Sheets.cutoutBlockItemSheet(),
         Sheets.translucentItemSheet(),
-        RenderTypes.glint(),
-        RenderTypes.glintTranslucent(),
-        RenderTypes.entityGlint()
+        RenderTypes.itemCutoutGlint(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS),
+        RenderTypes.itemTranslucentGlint(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS),
+        RenderTypes.entitySolidGlint(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS)
     );
+
+    public static boolean isPorted() {
+        return false;
+    }
 
     public static void bufferItemStack(
         ItemStack stack,

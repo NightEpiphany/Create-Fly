@@ -1,5 +1,6 @@
 package com.zurrtum.create.client.content.equipment.clipboard;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Window;
 import com.zurrtum.create.AllBlocks;
@@ -54,6 +55,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
     List<ClipboardEntry> currentEntries;
     int editingIndex;
     int frameTick;
+    boolean textInputActive;
     PageButton forward;
     PageButton backward;
     int currentPage;
@@ -154,8 +156,21 @@ public class ClipboardScreen extends AbstractSimiScreen {
         return pages.size();
     }
 
+    /**
+     * 26.3: text input (SDL) must be started explicitly while a text field is being edited, otherwise no
+     * character events are sent. Vanilla EditBox does this in setFocused.
+     */
+    private void syncTextInput() {
+        boolean editing = editingIndex != -1;
+        if (editing != textInputActive && minecraft != null) {
+            textInputActive = editing;
+            minecraft.textInputManager().onTextInputFocusChange(this, editing);
+        }
+    }
+
     @Override
     public void tick() {
+        syncTextInput();
         super.tick();
         frameTick++;
 
@@ -354,6 +369,10 @@ public class ClipboardScreen extends AbstractSimiScreen {
 
     @Override
     public void removed() {
+        if (textInputActive && minecraft != null) {
+            textInputActive = false;
+            minecraft.textInputManager().onTextInputFocusChange(this, false);
+        }
         pages.forEach(list -> list.removeIf(ce -> ce.text.getString().isBlank()));
         pages.removeIf(List::isEmpty);
 
@@ -414,7 +433,8 @@ public class ClipboardScreen extends AbstractSimiScreen {
 
     @Override
     public boolean charTyped(CharacterEvent input) {
-        if (super.charTyped(input)) {
+        boolean superResult = super.charTyped(input);
+        if (superResult) {
             return true;
         }
         if (!input.isAllowedChatCharacter()) {
@@ -596,7 +616,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
         if (super.mouseClicked(click, doubled)) {
             return true;
         }
-        if (click.button() != 0) {
+        if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) {
             return true;
         }
 
@@ -685,7 +705,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
         if (super.mouseDragged(click, pDragX, pDragY)) {
             return true;
         }
-        if (click.button() != 0) {
+        if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) {
             return true;
         }
         if (editingIndex == -1) {

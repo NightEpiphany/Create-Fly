@@ -1,5 +1,7 @@
 package com.zurrtum.create.client.infrastructure.model;
 
+import com.zurrtum.create.client.foundation.utility.MaterialShade;
+
 import com.zurrtum.create.catnip.data.Iterate;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.client.AllPartialModels;
@@ -131,15 +133,8 @@ public class FactoryPanelModel extends WrapperBlockStateModel {
             null
         );
         MaterialInfo info = bakedQuad.materialInfo();
-        if (ponder && info.shade()) {
-            info = new MaterialInfo(
-                info.sprite(),
-                info.layer(),
-                info.itemRenderType(),
-                info.tintIndex(),
-                false,
-                info.lightEmission()
-            );
+        if (ponder && MaterialShade.shade(info)) {
+            info = MaterialShade.copy(info, info.sprite(), info.layer(), info.itemRenderType(), false);
         }
         return new BakedQuad(
             calcXYZ(bakedQuad.position0(), xOffset, yOffset, xRot, yRot),

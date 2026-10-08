@@ -42,7 +42,7 @@ public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState, M e
             submitNodeCollector.order(0)
                 .submitCustomGeometry(poseStack, RenderTypes.armorCutoutNoCull(item.getLayerTexture()), layer);
             if (itemStack.hasFoil()) {
-                submitNodeCollector.order(1).submitCustomGeometry(poseStack, RenderTypes.armorEntityGlint(), layer);
+                submitNodeCollector.order(1).submitCustomGeometry(poseStack, RenderTypes.armorCutoutNoCullGlint(item.getLayerTexture()), layer);
             }
         }
     }

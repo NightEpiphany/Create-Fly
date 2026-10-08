@@ -5,6 +5,7 @@ import com.zurrtum.create.content.kinetics.belt.BeltBlockEntity;
 import com.zurrtum.create.content.kinetics.belt.BeltBlockEntity.CasingType;
 import com.zurrtum.create.content.kinetics.belt.BeltHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -36,21 +37,19 @@ public class BeltTunnelItem extends BlockItem {
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(
-        BlockPos pos,
-        Level world,
-        @Nullable Player p_195943_3_,
-        ItemStack p_195943_4_,
-        BlockState state
-    ) {
-        boolean flag = super.updateCustomBlockEntityTag(pos, world, p_195943_3_, p_195943_4_, state);
-        if (!world.isClientSide()) {
+    public InteractionResult place(BlockPlaceContext ctx) {
+        InteractionResult result = super.place(ctx);
+        // 26.3: BlockItem.updateCustomBlockEntityTag is static now; the belt casing is applied after placement.
+        Level world = ctx.getLevel();
+        if (result.consumesAction() && !world.isClientSide()) {
+            BlockPos pos = ctx.getClickedPos();
+            BlockState state = world.getBlockState(pos);
             BeltBlockEntity belt = BeltHelper.getSegmentBE(world, pos.below());
             if (belt != null && belt.casing == CasingType.NONE) {
                 belt.setCasingType(state.is(AllBlocks.ANDESITE_TUNNEL) ? CasingType.ANDESITE : CasingType.BRASS);
             }
         }
-        return flag;
+        return result;
     }
 
 }

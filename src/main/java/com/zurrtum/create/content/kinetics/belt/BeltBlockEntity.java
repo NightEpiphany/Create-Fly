@@ -62,7 +62,7 @@ public class BeltBlockEntity extends KineticBlockEntity implements Clearable {
     public enum CasingType implements StringRepresentable {
         NONE, ANDESITE, BRASS;
 
-        public static final Codec<CasingType> CODEC = StringRepresentable.fromEnum(CasingType::values);
+        public static final Codec<CasingType> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(CasingType::values);
 
         @Override
         public String getSerializedName() {
@@ -455,7 +455,7 @@ public class BeltBlockEntity extends KineticBlockEntity implements Clearable {
 
         if (casing != CasingType.NONE) {
             level.levelEvent(
-                LevelEvent.PARTICLES_DESTROY_BLOCK,
+                com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES,
                 worldPosition,
                 Block.getId(casing == CasingType.ANDESITE ? AllBlocks.ANDESITE_CASING.defaultBlockState() :
                     AllBlocks.BRASS_CASING.defaultBlockState())

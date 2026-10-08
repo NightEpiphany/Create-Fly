@@ -1,5 +1,6 @@
 package com.zurrtum.create.foundation.blockEntity.behaviour.filtering;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
@@ -277,7 +278,7 @@ public class ServerFilteringBehaviour extends BlockEntityBehaviour<SmartBlockEnt
                 1
             ).isEmpty()) {
                 if (!refund.isEmpty()) {
-                    inventory.placeItemBackInInventory(refund);
+                    InventoryCompat.placeItemBack(inventory, refund);
                 }
                 setFilter(side, copied);
                 return true;
@@ -292,7 +293,7 @@ public class ServerFilteringBehaviour extends BlockEntityBehaviour<SmartBlockEnt
         }
 
         if (!refund.isEmpty()) {
-            inventory.placeItemBackInInventory(refund);
+            InventoryCompat.placeItemBack(inventory, refund);
         }
 
         return setFilter(side, copied);
@@ -316,7 +317,7 @@ public class ServerFilteringBehaviour extends BlockEntityBehaviour<SmartBlockEnt
         if (filter.getItem() instanceof FilterItem) {
             Inventory inventory = player.getInventory();
             if (!player.isCreative() || inventory.count(filter, 1) == 0) {
-                inventory.placeItemBackInInventory(filter.copy());
+                InventoryCompat.placeItemBack(inventory, filter.copy());
             }
         }
 

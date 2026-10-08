@@ -1,6 +1,6 @@
 package com.zurrtum.create.content.logistics.stockTicker;
 
-import com.mojang.serialization.MapCodec;
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllShapes;
 import com.zurrtum.create.content.equipment.wrench.IWrenchable;
@@ -37,8 +37,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<StockTickerBlockEntity>, IWrenchable, ItemInventoryProvider<StockTickerBlockEntity> {
-
-    public static final MapCodec<StockTickerBlock> CODEC = simpleCodec(StockTickerBlock::new);
 
     public StockTickerBlock(Properties pProperties) {
         super(pProperties);
@@ -97,7 +95,7 @@ public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<
                             continue;
                         }
                         inventory.setItem(i, ItemStack.EMPTY);
-                        playerInventory.placeItemBackInInventory(target);
+                        InventoryCompat.placeItemBack(playerInventory, target);
                         anySuccess = true;
                     }
                     if (anySuccess) {
@@ -145,10 +143,5 @@ public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
-    }
-
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

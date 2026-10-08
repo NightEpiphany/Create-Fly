@@ -22,13 +22,7 @@ public class AllMapDecorationTypes {
     ) {
         Identifier key = Identifier.fromNamespaceAndPath(MOD_ID, id);
         ResourceKey<MapDecorationType> registryKey = ResourceKey.create(Registries.MAP_DECORATION_TYPE, key);
-        MapDecorationType mapDecorationType = new MapDecorationType(
-            key,
-            showOnItemFrame,
-            mapColor,
-            explorationMapElement,
-            trackCount
-        );
+        MapDecorationType mapDecorationType = new MapDecorationType(key, showOnItemFrame, trackCount);
         return Registry.registerForHolder(BuiltInRegistries.MAP_DECORATION_TYPE, registryKey, mapDecorationType);
     }
 

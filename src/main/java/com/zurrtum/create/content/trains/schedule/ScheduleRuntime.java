@@ -40,7 +40,7 @@ public class ScheduleRuntime {
     public enum State implements StringRepresentable {
         PRE_TRANSIT, IN_TRANSIT, POST_TRANSIT;
 
-        public static final Codec<State> CODEC = StringRepresentable.fromEnum(State::values);
+        public static final Codec<State> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(State::values);
 
         @Override
         public String getSerializedName() {

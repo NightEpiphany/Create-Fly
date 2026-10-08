@@ -28,10 +28,7 @@ import com.zurrtum.create.content.trains.bogey.AllBogeySizes;
 import com.zurrtum.create.content.trains.track.AllPortalTracks;
 import com.zurrtum.create.foundation.CreateNBTProcessors;
 import com.zurrtum.create.infrastructure.config.AllConfigs;
-import com.zurrtum.create.infrastructure.worldgen.AllConfiguredFeatures;
-import com.zurrtum.create.infrastructure.worldgen.AllFeatures;
 import com.zurrtum.create.infrastructure.worldgen.AllPlacedFeatures;
-import com.zurrtum.create.infrastructure.worldgen.AllPlacementModifiers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
@@ -56,6 +53,9 @@ public class Create implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        // 26.3: the BlocksMixin injection into Blocks.<clinit> may not apply anymore; AllBlocks.init() also
+        // registers the stress values in CStress, which AllConfigs.register() needs. It is idempotent.
+        AllBlocks.init();
         if (Lazy) {
             register();
         }
@@ -129,10 +129,7 @@ public class Create implements ModInitializer {
         AllFuelTimes.register();
         AllStructureProcessorTypes.register();
         CreateNBTProcessors.register();
-        AllFeatures.register();
-        AllConfiguredFeatures.register();
         AllPlacedFeatures.register();
-        AllPlacementModifiers.register();
         AllMountedDispenseItemBehaviors.register();
         AllBlockSpoutingBehaviours.register();
         AllDataComponentPredicates.register();

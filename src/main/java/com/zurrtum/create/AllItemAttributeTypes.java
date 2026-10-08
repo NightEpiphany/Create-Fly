@@ -1,5 +1,6 @@
 package com.zurrtum.create;
 
+import com.zurrtum.create.foundation.utility.FuelCompat;
 import com.zurrtum.create.api.registry.CreateRegistries;
 import com.zurrtum.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.zurrtum.create.content.logistics.item.filter.attribute.ItemAttributeType;
@@ -57,7 +58,7 @@ public class AllItemAttributeTypes {
             return type != EquipmentSlot.Type.HAND;
         }
     );
-    public static final ItemAttributeType FURNACE_FUEL = singleton("furnace_fuel", (s, w) -> w.fuelValues().isFuel(s));
+    public static final ItemAttributeType FURNACE_FUEL = singleton("furnace_fuel", (s, w) -> FuelCompat.isFuel(w, s));
     public static final ItemAttributeType WASHABLE = singleton("washable", AllFanProcessingTypes.SPLASHING::canProcess);
     public static final ItemAttributeType HAUNTABLE = singleton(
         "hauntable",
@@ -81,7 +82,7 @@ public class AllItemAttributeTypes {
     );
     public static final ItemAttributeType COMPOSTABLE = singleton(
         "compostable",
-        s -> ComposterBlock.COMPOSTABLES.containsKey(s.getItem())
+        s -> s.has(DataComponents.COMPOSTABLE)
     );
 
     public static final ItemAttributeType IN_TAG = register("in_tag", new InTagAttribute.Type());

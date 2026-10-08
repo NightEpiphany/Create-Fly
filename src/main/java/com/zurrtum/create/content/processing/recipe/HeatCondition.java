@@ -15,7 +15,7 @@ public enum HeatCondition implements StringRepresentable {
 
     private final int color;
 
-    public static final Codec<HeatCondition> CODEC = StringRepresentable.fromEnum(HeatCondition::values);
+    public static final Codec<HeatCondition> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(HeatCondition::values);
     public static final StreamCodec<ByteBuf, HeatCondition> PACKET_CODEC = CatnipStreamCodecBuilders.ofEnum(
         HeatCondition.class);
 

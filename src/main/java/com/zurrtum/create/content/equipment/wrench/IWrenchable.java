@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.equipment.wrench;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.catnip.math.VoxelShaper;
 import com.zurrtum.create.content.kinetics.base.*;
@@ -67,7 +68,7 @@ public interface IWrenchable {
         if (player != null && !player.isCreative()) {
             Block.getDrops(state, serverLevel, pos, world.getBlockEntity(pos), player, context.getItemInHand())
                 .forEach(itemStack -> {
-                    player.getInventory().placeItemBackInInventory(itemStack);
+                    InventoryCompat.placeItemBack(player.getInventory(), itemStack);
                 });
         }
 

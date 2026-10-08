@@ -13,6 +13,7 @@ public final class FlwProgramsReloader extends CreateResourceReloader {
 
     @Override
     public void onResourceManagerReload(ResourceManager manager) {
+        com.zurrtum.create.client.flywheel.backend.engine.MaterialTextures.clear();
         FlwPrograms.reload(manager);
         NoiseTextures.reload(manager);
     }

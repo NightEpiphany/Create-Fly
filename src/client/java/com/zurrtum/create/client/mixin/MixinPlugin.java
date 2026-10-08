@@ -31,10 +31,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
         //            mixins.add("RecipeViewScreenMixin");
         //            mixins.add("CraftingViewRecipeAccessor");
         //        }
-        if (loader.isModLoaded("rrv")) {
-            mixins.add("RrvRecipeViewMenuMixin");
-            mixins.add("RrvRecipeViewScreenMixin");
-        }
+        // TODO 26.3: RRV mixins disabled (RecipeViewMenu no longer an AbstractContainerMenu)
         if (!loader.isModLoaded("fabric-creative-tab-api-v1")) {
             mixins.add("CreativeModeInventoryScreenMixin");
         }

@@ -1,5 +1,7 @@
 package com.zurrtum.create.client.foundation.block.connected;
 
+import com.zurrtum.create.client.foundation.utility.MaterialShade;
+
 import com.mojang.blaze3d.platform.Transparency;
 import com.zurrtum.create.client.catnip.render.StitchedSprite;
 import com.zurrtum.create.client.foundation.model.BakedModelHelper;
@@ -78,14 +80,7 @@ public class CTStitchedSprite extends StitchedSprite {
             ));
         }
         if (info.layer() != layer) {
-            info = new MaterialInfo(
-                sprite,
-                layer,
-                info.itemRenderType(),
-                info.tintIndex(),
-                info.shade(),
-                info.lightEmission()
-            );
+            info = MaterialShade.copy(info, sprite, layer, info.itemRenderType(), MaterialShade.shade(info));
         }
         return BakedModelHelper.replaceBakedQuadUV(
             quad,

@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.equipment.wrench;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockTags;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllSoundEvents;
@@ -60,7 +61,7 @@ public class WrenchItem extends Item {
         }
         if (player != null && !player.isCreative()) {
             Block.getDrops(state, serverWorld, pos, world.getBlockEntity(pos), player, context.getItemInHand())
-                .forEach(itemStack -> player.getInventory().placeItemBackInInventory(itemStack));
+                .forEach(itemStack -> InventoryCompat.placeItemBack(player.getInventory(), itemStack));
         }
         state.spawnAfterBreak(serverWorld, pos, ItemStack.EMPTY, true);
         world.destroyBlock(pos, false);

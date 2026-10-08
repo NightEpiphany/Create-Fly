@@ -6,7 +6,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import org.jspecify.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +33,9 @@ public class ControlsUtil {
         InputConstants.Key key = kb.key;
         int button = key.getValue();
         if (key.getType() == InputConstants.Type.MOUSE) {
-            return GLFW.glfwGetMouseButton(window.handle(), button) == 1;
+            return SdlCompat.isMouseButtonDown(button);
         }
-        return InputConstants.isKeyDown(window, button);
+        return InputConstants.isKeyDown(button);
     }
 
 }

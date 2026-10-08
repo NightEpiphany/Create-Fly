@@ -11,7 +11,7 @@ import java.util.Locale;
 public enum ClipboardType implements StringRepresentable {
     EMPTY, WRITTEN, EDITING;
 
-    public static final Codec<ClipboardType> CODEC = StringRepresentable.fromEnum(ClipboardType::values);
+    public static final Codec<ClipboardType> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(ClipboardType::values);
     public static final StreamCodec<ByteBuf, ClipboardType> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         ClipboardType.class);
 

@@ -17,6 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
 
+@SuppressWarnings("all")
 public class JunkSlotRenderer implements IIngredientRenderer<ItemStack> {
     private static final JunkSlotRenderer INSTANCE = new JunkSlotRenderer();
 

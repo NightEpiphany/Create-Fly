@@ -11,7 +11,7 @@ import java.util.Locale;
 public enum BottleType implements StringRepresentable {
     REGULAR, SPLASH, LINGERING;
 
-    public static final Codec<BottleType> CODEC = StringRepresentable.fromEnum(BottleType::values);
+    public static final Codec<BottleType> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(BottleType::values);
     public static final StreamCodec<ByteBuf, BottleType> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(BottleType.class);
 
     @Override

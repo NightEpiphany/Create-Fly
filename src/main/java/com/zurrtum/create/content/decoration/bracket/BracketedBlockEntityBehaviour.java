@@ -65,7 +65,7 @@ public class BracketedBlockEntityBehaviour extends BlockEntityBehaviour<SmartBlo
         BlockState removed = bracket;
         Level world = getLevel();
         if (!world.isClientSide()) {
-            world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, getPos(), Block.getId(bracket));
+            world.levelEvent(com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES, getPos(), Block.getId(bracket));
         }
         bracket = null;
         reRender = true;
@@ -114,7 +114,7 @@ public class BracketedBlockEntityBehaviour extends BlockEntityBehaviour<SmartBlo
     @Override
     public void write(ValueOutput view, boolean clientPacket) {
         if (isBracketPresent() && isBracketValid(bracket)) {
-            view.store("Bracket", BlockState.CODEC, bracket);
+            view.store("Bracket", com.zurrtum.create.foundation.codec.CreateCodecs.BLOCK_STATE_COMPAT, bracket);
         }
         if (clientPacket && reRender) {
             view.putBoolean("Redraw", true);
@@ -125,7 +125,7 @@ public class BracketedBlockEntityBehaviour extends BlockEntityBehaviour<SmartBlo
 
     @Override
     public void read(ValueInput view, boolean clientPacket) {
-        view.read("Bracket", BlockState.CODEC).ifPresent(state -> {
+        view.read("Bracket", com.zurrtum.create.foundation.codec.CreateCodecs.BLOCK_STATE_COMPAT).ifPresent(state -> {
             bracket = null;
             if (isBracketValid(state)) {
                 bracket = state;

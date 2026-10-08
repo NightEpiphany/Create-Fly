@@ -156,7 +156,9 @@ public class InstancedDrawManager extends DrawManager<InstancedInstancer<?>> {
 
             program.setUInt("_flw_vertexOffset", drawCall.mesh().baseVertex());
 
-            MaterialRenderState.setup(material);
+            if (!MaterialRenderState.setup(material)) {
+                continue;
+            }
 
             Samplers.INSTANCE_BUFFER.makeActive();
 
@@ -179,7 +181,9 @@ public class InstancedDrawManager extends DrawManager<InstancedInstancer<?>> {
 
             program.setUInt("_flw_vertexOffset", drawCall.mesh().baseVertex());
 
-            MaterialRenderState.setupOit(material);
+            if (!MaterialRenderState.setupOit(material)) {
+                continue;
+            }
 
             Samplers.INSTANCE_BUFFER.makeActive();
 
@@ -282,7 +286,9 @@ public class InstancedDrawManager extends DrawManager<InstancedInstancer<?>> {
                         program.setInt("_flw_baseInstance", index);
                         uploadMaterialUniform(program, crumblingMaterial);
 
-                        MaterialRenderState.setup(crumblingMaterial);
+                        if (!MaterialRenderState.setup(crumblingMaterial)) {
+                            continue;
+                        }
 
                         Samplers.INSTANCE_BUFFER.makeActive();
 

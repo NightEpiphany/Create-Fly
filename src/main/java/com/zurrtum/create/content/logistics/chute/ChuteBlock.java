@@ -94,7 +94,7 @@ public class ChuteBlock extends AbstractChuteBlock implements ProperWaterloggedB
         if (shape == Shape.ENCASED) {
             level.setBlockAndUpdate(context.getClickedPos(), state.setValue(SHAPE, Shape.NORMAL));
             level.levelEvent(
-                LevelEvent.PARTICLES_DESTROY_BLOCK,
+                com.zurrtum.create.foundation.utility.CreateLevelEvents.DESTROY_BLOCK_SOUND_AND_PARTICLES,
                 context.getClickedPos(),
                 getId(AllBlocks.INDUSTRIAL_IRON_BLOCK.defaultBlockState())
             );

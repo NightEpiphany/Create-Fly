@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.logistics.packager;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllItems;
@@ -164,7 +165,7 @@ public class PackagerBlock extends WrenchableDirectionalBlock implements IBE<Pac
                     return InteractionResult.SUCCESS;
                 }
                 if (!level.isClientSide()) {
-                    player.getInventory().placeItemBackInInventory(be.heldBox.copy());
+                    InventoryCompat.placeItemBack(player.getInventory(), be.heldBox.copy());
                     player.level().playSound(
                         null,
                         player.blockPosition(),

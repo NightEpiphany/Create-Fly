@@ -1,15 +1,15 @@
 package com.zurrtum.create.client.flywheel.backend.engine;
 
-import com.mojang.blaze3d.opengl.GlDevice;
-import com.mojang.blaze3d.opengl.GlSampler;
-import com.mojang.blaze3d.opengl.GlStateManager;
-import com.mojang.blaze3d.opengl.GlTexture;
-import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.renderpearl.backend.opengl.GlDevice;
+import com.mojang.renderpearl.backend.opengl.GlSampler;
+import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import com.mojang.renderpearl.backend.opengl.GlTexture;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
-import com.mojang.blaze3d.textures.GpuSampler;
-import com.mojang.blaze3d.textures.GpuTextureView;
+import com.mojang.renderpearl.api.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.GpuSampler;
+import com.mojang.renderpearl.api.textures.GpuTextureView;
 import com.zurrtum.create.client.flywheel.api.material.DepthTest;
 import com.zurrtum.create.client.flywheel.api.material.Material;
 import com.zurrtum.create.client.flywheel.api.material.Transparency;
@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL33C;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static com.mojang.blaze3d.opengl.GlConst.*;
+import static com.mojang.renderpearl.backend.opengl.GlConst.*;
 
 public final class MaterialRenderState {
     public static final Comparator<Material> COMPARATOR = MaterialRenderState::compare;
@@ -34,21 +34,29 @@ public final class MaterialRenderState {
     private MaterialRenderState() {
     }
 
-    public static void setup(Material material) {
+    public static boolean setup(Material material) {
+        if (!MaterialTextures.isReady(material.texture())) {
+            return false;
+        }
         setupTexture(material);
         setupBackfaceCulling(material.backfaceCulling());
         setupPolygonOffset(material.polygonOffset());
         setupDepthTest(material.depthTest());
         setupTransparency(material.transparency());
         setupWriteMask(material.writeMask());
+        return true;
     }
 
-    public static void setupOit(Material material) {
+    public static boolean setupOit(Material material) {
+        if (!MaterialTextures.isReady(material.texture())) {
+            return false;
+        }
         setupTexture(material);
         setupBackfaceCulling(material.backfaceCulling());
         setupPolygonOffset(material.polygonOffset());
         setupDepthTest(material.depthTest());
         GlStateManager._colorMask(material.writeMask().color());
+        return true;
     }
 
     private static void setupTexture(Material material) {
@@ -180,19 +188,22 @@ public final class MaterialRenderState {
         resetWriteMask();
     }
 
+    private static int previousFrameBuffer = 0;
+
     public static void setupFrameBuffer() {
+        previousFrameBuffer = GL11.glGetInteger(org.lwjgl.opengl.GL30C.GL_DRAW_FRAMEBUFFER_BINDING);
         RenderTarget target = Minecraft.getInstance().gameRenderer.mainRenderTarget();
-        GlDevice device = (GlDevice) RenderSystem.getDevice().backend;
+        GlDevice device = com.zurrtum.create.client.flywheel.backend.gl.FlwGlDevice.get();
         int fbo = device.frameBufferCache().getFbo(
             device.directStateAccess(),
             Collections.singletonList((GlTexture) target.getColorTexture()),
-            target.useDepth ? (GlTexture) target.getDepthTexture() : null
+            target.getDepthTexture() != null ? (GlTexture) target.getDepthTexture() : null
         );
         GlStateManager._glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     }
 
     private static void resetFrameBuffer() {
-        GlStateManager._glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        GlStateManager._glBindFramebuffer(GL_FRAMEBUFFER, previousFrameBuffer);
     }
 
     private static void resetTexture() {

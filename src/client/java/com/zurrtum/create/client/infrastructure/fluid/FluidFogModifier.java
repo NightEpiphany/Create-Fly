@@ -40,10 +40,10 @@ public class FluidFogModifier extends WaterFogEnvironment {
     }
 
     @Override
-    public int getBaseColor(ClientLevel world, Camera camera, int viewDistance, float skyDarkness) {
+    public org.joml.Vector3fc getBaseColor(ClientLevel world, Camera camera, int viewDistance, float skyDarkness) {
         int color = AllFluidConfigs.FOG_COLOR.getOrDefault(world.getFluidState(camera.blockPosition()).getType(), -1);
         if (color != -1) {
-            return color;
+            return new org.joml.Vector3f(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F, (color & 0xFF) / 255.0F);
         }
         return super.getBaseColor(world, camera, viewDistance, skyDarkness);
     }

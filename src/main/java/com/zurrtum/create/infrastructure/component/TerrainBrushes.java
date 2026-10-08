@@ -16,7 +16,7 @@ public enum TerrainBrushes implements StringRepresentable {
     Surface(new DynamicBrush(true)),
     Cluster(new DynamicBrush(false));
 
-    public static final Codec<TerrainBrushes> CODEC = StringRepresentable.fromEnum(TerrainBrushes::values);
+    public static final Codec<TerrainBrushes> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(TerrainBrushes::values);
     public static final StreamCodec<ByteBuf, TerrainBrushes> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         TerrainBrushes.class);
 

@@ -118,17 +118,7 @@ public abstract class ClientPackSourceMixin {
             builder.pushAssetPath(PackType.CLIENT_RESOURCES, path.resolve(directory));
         }
         VanillaPackResources pack = builder.build(info);
-        Pack.ResourcesSupplier packFactory = new Pack.ResourcesSupplier() {
-            @Override
-            public @NonNull PackResources openPrimary(@NonNull PackLocationInfo info) {
-                return pack;
-            }
-
-            @Override
-            public @NonNull PackResources openFull(@NonNull PackLocationInfo info, @NonNull Metadata metadata) {
-                return pack;
-            }
-        };
+        Pack.ResourcesSupplier packFactory = pack.asResourcesSupplier();
         return Pack.readMetaAndCreate(info, packFactory, PackType.CLIENT_RESOURCES, position);
     }
 }

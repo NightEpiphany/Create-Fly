@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.deployer;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllAdvancements;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllSoundEvents;
@@ -181,7 +182,7 @@ public class BeltDeployerCallbacks {
                     if (heldItem.isEmpty()) {
                         player.setItemInHand(InteractionHand.MAIN_HAND, stack);
                     } else if (!player.getInventory().add(stack)) {
-                        player.drop(stack, false);
+                        InventoryCompat.drop(player, stack, false);
                     }
                 }
             }

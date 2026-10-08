@@ -78,7 +78,7 @@ public class ArmBlockEntity extends KineticBlockEntity implements TransformableB
     public enum Phase implements StringRepresentable {
         SEARCH_INPUTS, MOVE_TO_INPUT, SEARCH_OUTPUTS, MOVE_TO_OUTPUT, DANCING;
 
-        public static final Codec<Phase> CODEC = StringRepresentable.fromEnum(Phase::values);
+        public static final Codec<Phase> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(Phase::values);
 
         @Override
         public String getSerializedName() {

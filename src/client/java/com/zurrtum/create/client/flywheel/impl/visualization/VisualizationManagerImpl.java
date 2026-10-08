@@ -364,6 +364,7 @@ public class VisualizationManagerImpl implements VisualizationManager {
     private class RenderDispatcherImpl implements RenderDispatcher {
         @Override
         public void onStartLevelRender(RenderContext ctx) {
+            com.zurrtum.create.client.flywheel.backend.engine.MaterialTextures.loadPending();
             beginFrame(ctx);
         }
 

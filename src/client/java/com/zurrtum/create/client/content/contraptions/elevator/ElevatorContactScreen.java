@@ -1,5 +1,6 @@
 package com.zurrtum.create.client.content.contraptions.elevator;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.google.common.collect.ImmutableList;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.catnip.data.Pair;
@@ -26,7 +27,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.FormattedCharSequence;
-import org.lwjgl.glfw.GLFW;
 
 public class ElevatorContactScreen extends AbstractSimiScreen {
 
@@ -127,7 +127,7 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
         editBox.setBordered(false);
         editBox.setMaxLength(chars);
         editBox.setFocused(false);
-        editBox.mouseClicked(new MouseButtonEvent(0, 0, new MouseButtonInfo(0, 0)), false);
+        editBox.mouseClicked(new MouseButtonEvent(0, 0, new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0)), false);
         addRenderableWidget(editBox);
         return editBox;
     }
@@ -163,7 +163,7 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
         }
 
         if (shortNameInput.isHoveredOrFocused()) {
-            longNameInput.mouseClicked(new MouseButtonEvent(0, 0, new MouseButtonInfo(0, 0)), false);
+            longNameInput.mouseClicked(new MouseButtonEvent(0, 0, new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0)), false);
         }
 
         if (!consumed && click.x() > guiLeft + 22 && click.y() > guiTop + 24 && click.x() < guiLeft + 50 && click.y() < guiTop + 40) {
@@ -181,7 +181,7 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
             return true;
         }
         int keyCode = input.key();
-        if (keyCode == GLFW.GLFW_KEY_ENTER) {
+        if (keyCode == InputConstants.KEY_RETURN) {
             confirm();
             return true;
         }

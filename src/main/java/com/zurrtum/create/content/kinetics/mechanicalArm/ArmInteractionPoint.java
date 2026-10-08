@@ -32,7 +32,14 @@ public class ArmInteractionPoint {
         return RecordCodecBuilder.create(instance -> instance.group(
             CreateRegistries.ARM_INTERACTION_POINT_TYPE.byNameCodec().fieldOf("Type")
                 .forGetter(ArmInteractionPoint::getType),
-            BlockPos.CODEC.fieldOf("Pos").forGetter(point -> point.pos.subtract(anchor)),
+            com.mojang.serialization.Codec.either(
+                BlockPos.CODEC,
+                com.mojang.serialization.codecs.RecordCodecBuilder.<BlockPos>create(i -> i.group(
+                    com.mojang.serialization.Codec.INT.fieldOf("X").forGetter(BlockPos::getX),
+                    com.mojang.serialization.Codec.INT.fieldOf("Y").forGetter(BlockPos::getY),
+                    com.mojang.serialization.Codec.INT.fieldOf("Z").forGetter(BlockPos::getZ)
+                ).apply(i, BlockPos::new))
+            ).xmap(e -> e.map(p -> p, p -> p), com.mojang.datafixers.util.Either::left).fieldOf("Pos").forGetter(point -> point.pos.subtract(anchor)),
             Mode.CODEC.fieldOf("Mode").forGetter(ArmInteractionPoint::getMode)
         ).apply(
             instance, (type, pos, mode) -> {
@@ -259,7 +266,7 @@ public class ArmInteractionPoint {
     public enum Mode implements StringRepresentable {
         DEPOSIT("create.mechanical_arm.deposit_to", 0xDDC166), TAKE("create.mechanical_arm.extract_from", 0x7FCDE0);
 
-        public static final Codec<Mode> CODEC = StringRepresentable.fromEnum(Mode::values);
+        public static final Codec<Mode> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(Mode::values);
         public static final StreamCodec<ByteBuf, Mode> PACKET_CODEC = CatnipStreamCodecBuilders.ofEnum(Mode.class);
         private final String translationKey;
         private final int color;

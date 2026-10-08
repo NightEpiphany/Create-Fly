@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,21 +28,13 @@ public class ArmItem extends BlockItem {
         if (ArmInteractionPoint.isInteractable(world, pos, world.getBlockState(pos))) {
             return InteractionResult.SUCCESS;
         }
-        return super.useOn(ctx);
-    }
-
-    @Override
-    protected boolean updateCustomBlockEntityTag(
-        BlockPos pos,
-        Level world,
-        @Nullable Player player,
-        ItemStack p_195943_4_,
-        BlockState p_195943_5_
-    ) {
-        if (!world.isClientSide() && player instanceof ServerPlayer sp) {
-            sp.connection.send(new ArmPlacementRequestPacket(pos));
+        BlockPos placePos = new BlockPlaceContext(ctx).getClickedPos();
+        InteractionResult result = super.useOn(ctx);
+        // 26.3: BlockItem.updateCustomBlockEntityTag is static and no longer a hook
+        if (result.consumesAction() && !world.isClientSide() && ctx.getPlayer() instanceof ServerPlayer sp) {
+            sp.connection.send(new ArmPlacementRequestPacket(placePos));
         }
-        return super.updateCustomBlockEntityTag(pos, world, player, p_195943_4_, p_195943_5_);
+        return result;
     }
 
     @Override

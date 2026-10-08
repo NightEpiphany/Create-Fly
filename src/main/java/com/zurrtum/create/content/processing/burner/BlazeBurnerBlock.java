@@ -1,7 +1,7 @@
 package com.zurrtum.create.content.processing.burner;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllItems;
@@ -48,7 +48,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Locale;
 
 public class BlazeBurnerBlock extends HorizontalDirectionalBlock implements IBE<BlazeBurnerBlockEntity>, IWrenchable, SpecialBlockItemRequirement {
-    public static final MapCodec<BlazeBurnerBlock> CODEC = simpleCodec(BlazeBurnerBlock::new);
     public static final EnumProperty<HeatLevel> HEAT_LEVEL = EnumProperty.create("blaze", HeatLevel.class);
 
     public BlazeBurnerBlock(Properties settings) {
@@ -160,7 +159,7 @@ public class BlazeBurnerBlock extends HorizontalDirectionalBlock implements IBE<
                 if (stack.isEmpty()) {
                     player.setItemInHand(hand, leftover);
                 } else if (!player.getInventory().add(leftover)) {
-                    player.drop(leftover, false);
+                    InventoryCompat.drop(player, leftover, false);
                 }
             }
         }
@@ -277,11 +276,6 @@ public class BlazeBurnerBlock extends HorizontalDirectionalBlock implements IBE<
         );
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
-    }
-
     public static HeatLevel getHeatLevelOf(BlockState blockState) {
         return blockState.hasProperty(HEAT_LEVEL) ? blockState.getValue(HEAT_LEVEL) : HeatLevel.NONE;
     }
@@ -323,7 +317,7 @@ public class BlazeBurnerBlock extends HorizontalDirectionalBlock implements IBE<
     public enum HeatLevel implements StringRepresentable {
         NONE, SMOULDERING, FADING, KINDLED, SEETHING;
 
-        public static final Codec<HeatLevel> CODEC = StringRepresentable.fromEnum(HeatLevel::values);
+        public static final Codec<HeatLevel> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(HeatLevel::values);
 
         public static HeatLevel byIndex(int index) {
             return values()[index];

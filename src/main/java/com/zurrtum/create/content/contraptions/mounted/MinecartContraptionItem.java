@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.contraptions.mounted;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllAdvancements;
 import com.zurrtum.create.AllDataComponents;
 import com.zurrtum.create.AllItems;
@@ -306,7 +307,7 @@ public class MinecartContraptionItem extends Item {
             AllAdvancements.CART_PICKUP.trigger(serverPlayer);
         }
 
-        player.getInventory().placeItemBackInInventory(generatedStack);
+        InventoryCompat.placeItemBack(player.getInventory(), generatedStack);
         oce.discard();
         entity.discard();
         return InteractionResult.SUCCESS;

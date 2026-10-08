@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 public enum PlacementPatterns implements StringRepresentable {
     Solid, Checkered, InverseCheckered, Chance25, Chance50, Chance75;
 
-    public static final Codec<PlacementPatterns> CODEC = StringRepresentable.fromEnum(PlacementPatterns::values);
+    public static final Codec<PlacementPatterns> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(PlacementPatterns::values);
     public static final StreamCodec<ByteBuf, PlacementPatterns> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         PlacementPatterns.class);
 

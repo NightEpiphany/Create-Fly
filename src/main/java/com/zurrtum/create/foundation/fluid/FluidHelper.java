@@ -1,5 +1,6 @@
 package com.zurrtum.create.foundation.fluid;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllFluidItemInventory;
 import com.zurrtum.create.AllTransfer;
 import com.zurrtum.create.catnip.data.Pair;
@@ -203,7 +204,7 @@ public class FluidHelper {
                 player.setItemInHand(handIn, emptyingResult.getSecond());
             } else {
                 player.setItemInHand(handIn, copyOfHeld);
-                player.getInventory().placeItemBackInInventory(emptyingResult.getSecond());
+                InventoryCompat.placeItemBack(player.getInventory(), emptyingResult.getSecond());
             }
         }
         return true;
@@ -252,7 +253,7 @@ public class FluidHelper {
             capability.extract(copy, null);
 
             if (!player.isCreative()) {
-                player.getInventory().placeItemBackInInventory(out);
+                InventoryCompat.placeItemBack(player.getInventory(), out);
             }
             be.notifyUpdate();
             return true;

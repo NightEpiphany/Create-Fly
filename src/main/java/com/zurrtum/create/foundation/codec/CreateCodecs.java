@@ -68,7 +68,42 @@ public class CreateCodecs {
     public static final Codec<List<ItemStack>> ITEM_LIST_CODEC = ItemStack.OPTIONAL_CODEC.listOf();
     public static final Codec<List<FluidStack>> FLUID_LIST_CODEC = FluidStack.OPTIONAL_CODEC.listOf();
     public static final Codec<List<Direction>> DIRECTION_LIST_CODEC = Direction.CODEC.listOf();
-    public static final Codec<List<BlockState>> BLOCK_STATE_LIST_CODEC = BlockState.CODEC.listOf();
+    /**
+     * 26.3 compat: BlockState.CODEC now uses {id, Properties}; data written by older versions uses {Name, Properties}.
+     * Vanilla's DataFixer does not touch mod-owned NBT (contraptions, block entities), so accept both on read.
+     * Writes always use the current vanilla format.
+     */
+    public static final Codec<BlockState> BLOCK_STATE_COMPAT = new Codec<>() {
+        @Override
+        public <T> DataResult<com.mojang.datafixers.util.Pair<BlockState, T>> decode(DynamicOps<T> ops, T input) {
+            DataResult<com.mojang.datafixers.util.Pair<BlockState, T>> result = BlockState.CODEC.decode(ops, input);
+            if (result.result().isPresent()) {
+                return result;
+            }
+            Optional<MapLike<T>> map = ops.getMap(input).result();
+            if (map.isEmpty()) {
+                return result;
+            }
+            T name = map.get().get("Name");
+            if (name == null) {
+                return result;
+            }
+            Map<T, T> converted = new LinkedHashMap<>();
+            converted.put(ops.createString("id"), name);
+            T properties = map.get().get("Properties");
+            if (properties != null) {
+                converted.put(ops.createString("properties"), properties);
+                converted.put(ops.createString("Properties"), properties);
+            }
+            return BlockState.CODEC.decode(ops, ops.createMap(converted));
+        }
+
+        @Override
+        public <T> DataResult<T> encode(BlockState input, DynamicOps<T> ops, T prefix) {
+            return BlockState.CODEC.encode(input, ops, prefix);
+        }
+    };
+    public static final Codec<List<BlockState>> BLOCK_STATE_LIST_CODEC = BLOCK_STATE_COMPAT.listOf();
     public static final Codec<List<BlockPos>> BLOCK_POS_LIST_CODEC = BlockPos.CODEC.listOf();
     public static final Codec<Set<BlockPos>> BLOCKPOS_SET_CODEC = BlockPos.CODEC.listOf()
         .xmap(ImmutableSet::copyOf, ImmutableList::copyOf);

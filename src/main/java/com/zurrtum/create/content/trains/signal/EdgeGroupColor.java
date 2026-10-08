@@ -22,7 +22,7 @@ public enum EdgeGroupColor implements StringRepresentable {
 
     WHITE(0xE5E1DC);
 
-    public static final Codec<EdgeGroupColor> CODEC = StringRepresentable.fromEnum(EdgeGroupColor::values);
+    public static final Codec<EdgeGroupColor> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(EdgeGroupColor::values);
     public static final StreamCodec<ByteBuf, EdgeGroupColor> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
         EdgeGroupColor.class);
 

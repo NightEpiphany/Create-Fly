@@ -252,8 +252,8 @@ public class LinkedControllerModel implements ItemModel, SpecialModelRenderer<Re
             int handModifier = displayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ? -1 : 1;
             matrices.translate(0, progress / 4, progress / 4 * handModifier);
             matrices.translate(0.5f, 0.5f, 0.5f);
-            matrices.mulPose(Axis.YP.rotationDegrees(progress * -30 * handModifier));
-            matrices.mulPose(Axis.ZP.rotationDegrees(progress * -30));
+            matrices.rotate(Axis.YP.rotationDegrees(progress * -30 * handModifier));
+            matrices.rotate(Axis.ZP.rotationDegrees(progress * -30));
             matrices.translate(-0.5f, -0.5f, -0.5f);
         }
 
@@ -322,7 +322,7 @@ public class LinkedControllerModel implements ItemModel, SpecialModelRenderer<Re
         int overlay,
         List<BakedQuad> quads
     ) {
-        queue.submitItem(matrices, displayContext, light, overlay, 0, tints, quads, FoilType.NONE);
+        queue.submitItem(matrices, displayContext, light, overlay, 0, tints, net.minecraft.client.resources.model.geometry.ItemQuads.split(quads), FoilType.NONE);
     }
 
     public static class RenderData {

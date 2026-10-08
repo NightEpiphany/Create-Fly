@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.trains.schedule;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.AllSoundEvents;
 import com.zurrtum.create.catnip.data.Couple;
@@ -106,7 +107,7 @@ public class ScheduleItemEntityInteraction {
                 train.runtime.isAutoSchedule ? "create.schedule.auto_removed_from_train" :
                     "create.schedule.removed_from_train"));
 
-            player.getInventory().placeItemBackInInventory(train.runtime.returnSchedule(player.registryAccess()));
+            InventoryCompat.placeItemBack(player.getInventory(), train.runtime.returnSchedule(player.registryAccess()));
         }
 
         player.getCooldowns().addCooldown(schedule, 5);

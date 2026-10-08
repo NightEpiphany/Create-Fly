@@ -96,6 +96,77 @@ public class SchematicItem extends Item {
         return settings;
     }
 
+    /**
+     * 26.3 port: block states in NBT now use "id" instead of "Name". Old schematic files
+     * are not run through the DataFixer here, so rename the palette keys ourselves.
+     */
+    public static void upgradeLegacyPalettes(net.minecraft.nbt.CompoundTag nbt) {
+        net.minecraft.nbt.Tag blocks = nbt.get("blocks");
+        if (blocks instanceof net.minecraft.nbt.ListTag blockList) {
+            for (net.minecraft.nbt.Tag block : blockList) {
+                if (block instanceof net.minecraft.nbt.CompoundTag c && c.get("nbt") != null) {
+                    upgradeLegacyBlockPos(c.get("nbt"));
+                }
+            }
+        }
+        upgradePalette(nbt.get("palette"));
+        net.minecraft.nbt.Tag palettes = nbt.get("palettes");
+        if (palettes instanceof net.minecraft.nbt.ListTag list) {
+            for (net.minecraft.nbt.Tag palette : list) {
+                upgradePalette(palette);
+            }
+        }
+    }
+
+    /** Legacy block positions were stored as {X:,Y:,Z:} compounds; 26.3 codecs expect int arrays. */
+    private static void upgradeLegacyBlockPos(net.minecraft.nbt.Tag tag) {
+        if (tag instanceof net.minecraft.nbt.CompoundTag compound) {
+            for (String key : new java.util.ArrayList<>(compound.keySet())) {
+                net.minecraft.nbt.Tag child = compound.get(key);
+                if (child instanceof net.minecraft.nbt.CompoundTag c && c.size() == 3 && c.get("X") instanceof net.minecraft.nbt.NumericTag x
+                    && c.get("Y") instanceof net.minecraft.nbt.NumericTag y && c.get("Z") instanceof net.minecraft.nbt.NumericTag z) {
+                    compound.put(key, new net.minecraft.nbt.IntArrayTag(new int[]{x.intValue(), y.intValue(), z.intValue()}));
+                } else {
+                    upgradeLegacyBlockPos(child);
+                }
+            }
+        } else if (tag instanceof net.minecraft.nbt.ListTag list) {
+            for (int i = 0; i < list.size(); i++) {
+                net.minecraft.nbt.Tag child = list.get(i);
+                if (child instanceof net.minecraft.nbt.CompoundTag c && c.size() == 3 && c.get("X") instanceof net.minecraft.nbt.NumericTag x
+                    && c.get("Y") instanceof net.minecraft.nbt.NumericTag y && c.get("Z") instanceof net.minecraft.nbt.NumericTag z) {
+                    list.set(i, new net.minecraft.nbt.IntArrayTag(new int[]{x.intValue(), y.intValue(), z.intValue()}));
+                } else {
+                    upgradeLegacyBlockPos(child);
+                }
+            }
+        }
+    }
+
+    private static void upgradePalette(net.minecraft.nbt.Tag palette) {
+        if (!(palette instanceof net.minecraft.nbt.ListTag list)) {
+            return;
+        }
+        for (net.minecraft.nbt.Tag entry : list) {
+            if (entry instanceof net.minecraft.nbt.CompoundTag compound) {
+                if (compound.get("id") == null) {
+                    net.minecraft.nbt.Tag name = compound.get("Name");
+                    if (name != null) {
+                        compound.remove("Name");
+                        compound.put("id", name);
+                    }
+                }
+                if (compound.get("properties") == null) {
+                    net.minecraft.nbt.Tag properties = compound.get("Properties");
+                    if (properties != null) {
+                        compound.remove("Properties");
+                        compound.put("properties", properties);
+                    }
+                }
+            }
+        }
+    }
+
     public static StructureTemplate loadSchematic(Level level, ItemStack blueprint) {
         StructureTemplate t = new StructureTemplate();
         String owner = blueprint.get(AllDataComponents.SCHEMATIC_OWNER);
@@ -125,6 +196,7 @@ public class SchematicItem extends Item {
             StandardOpenOption.READ
         ))))) {
             CompoundTag nbt = NbtIo.read(stream, NbtAccounter.create(0x20000000L));
+            upgradeLegacyPalettes(nbt);
             t.load(level.holderLookup(Registries.BLOCK), nbt);
         } catch (IOException e) {
             LOGGER.warn("Failed to read schematic", e);

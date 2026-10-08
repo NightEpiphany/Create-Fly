@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.decoration.bracket;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.api.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -73,7 +74,7 @@ public class BracketBlockItem extends BlockItem {
                 if (player == null) {
                     Block.popResource(world, pos, returnedStack);
                 } else {
-                    player.getInventory().placeItemBackInInventory(returnedStack);
+                    InventoryCompat.placeItemBack(player.getInventory(), returnedStack);
                 }
             }
         }

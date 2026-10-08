@@ -1,5 +1,6 @@
 package com.zurrtum.create.content.kinetics.crafter;
 
+import com.zurrtum.create.foundation.utility.InventoryCompat;
 import com.zurrtum.create.AllBlockEntityTypes;
 import com.zurrtum.create.AllBlocks;
 import com.zurrtum.create.AllItems;
@@ -252,8 +253,7 @@ public class MechanicalCrafterBlock extends HorizontalKineticBlock implements IB
                     crafter.setChanged();
                     crafter.sendData();
                     if (!player.isCreative()) {
-                        player.getInventory()
-                            .placeItemBackInInventory(AllItems.CRAFTER_SLOT_COVER.getDefaultInstance());
+                        InventoryCompat.placeItemBack(player.getInventory(), AllItems.CRAFTER_SLOT_COVER.getDefaultInstance());
                     }
                     return InteractionResult.SUCCESS;
                 }
@@ -265,7 +265,7 @@ public class MechanicalCrafterBlock extends HorizontalKineticBlock implements IB
             if (level.isClientSide()) {
                 return InteractionResult.SUCCESS;
             }
-            player.getInventory().placeItemBackInInventory(handler.onExtract(inSlot));
+            InventoryCompat.placeItemBack(player.getInventory(), handler.onExtract(inSlot));
             handler.setStack(ItemStack.EMPTY);
             handler.setChanged();
             return InteractionResult.SUCCESS;

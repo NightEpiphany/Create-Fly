@@ -18,17 +18,14 @@ public class PackagePortItem extends BlockItem {
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(
-        BlockPos pos,
-        Level world,
-        @Nullable Player player,
-        ItemStack p_195943_4_,
-        BlockState p_195943_5_
-    ) {
-        if (!world.isClientSide() && player instanceof ServerPlayer sp) {
-            sp.connection.send(new PackagePortPlacementRequestPacket(pos));
+    public net.minecraft.world.InteractionResult useOn(net.minecraft.world.item.context.UseOnContext ctx) {
+        BlockPos placePos = new net.minecraft.world.item.context.BlockPlaceContext(ctx).getClickedPos();
+        net.minecraft.world.InteractionResult result = super.useOn(ctx);
+        // 26.3: BlockItem.updateCustomBlockEntityTag is static and no longer a hook
+        if (result.consumesAction() && !ctx.getLevel().isClientSide() && ctx.getPlayer() instanceof ServerPlayer sp) {
+            sp.connection.send(new PackagePortPlacementRequestPacket(placePos));
         }
-        return super.updateCustomBlockEntityTag(pos, world, player, p_195943_4_, p_195943_5_);
+        return result;
     }
 
 }

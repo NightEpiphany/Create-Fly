@@ -22,7 +22,7 @@ import java.util.Locale;
 public enum TerrainTools implements StringRepresentable {
     Fill, Place, Replace, Clear, Overlay, Flatten;
 
-    public static final Codec<TerrainTools> CODEC = StringRepresentable.fromEnum(TerrainTools::values);
+    public static final Codec<TerrainTools> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(TerrainTools::values);
     public static final StreamCodec<ByteBuf, TerrainTools> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(TerrainTools.class);
     public final String translationKey;
 

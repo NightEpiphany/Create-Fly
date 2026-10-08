@@ -67,7 +67,7 @@ public record ShulkerFillLevelAttribute(@Nullable ShulkerLevels levels) implemen
         PARTIAL("partial", amount -> amount > 0 && amount < ShulkerBoxBlockEntity.CONTAINER_SIZE),
         FULL("full", amount -> amount == ShulkerBoxBlockEntity.CONTAINER_SIZE);
 
-        public static final Codec<ShulkerLevels> CODEC = StringRepresentable.fromEnum(ShulkerLevels::values);
+        public static final Codec<ShulkerLevels> CODEC = com.zurrtum.create.foundation.codec.LenientEnumCodec.create(ShulkerLevels::values);
         public static final StreamCodec<ByteBuf, ShulkerLevels> STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(
             ShulkerLevels.class);
 
