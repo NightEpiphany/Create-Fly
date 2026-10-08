@@ -8,3 +8,6 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
+
+// Title for the project
+rootProject.name = "CF-26.3-fabric"
