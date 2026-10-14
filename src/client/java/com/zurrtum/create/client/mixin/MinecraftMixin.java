@@ -1,5 +1,6 @@
 package com.zurrtum.create.client.mixin;
 
+import com.zurrtum.create.client.flywheel.impl.visualization.VisualizationManagerImpl;
 import net.minecraft.world.item.component.SwingAnimation;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -56,7 +57,7 @@ import com.zurrtum.create.client.content.trains.track.TrackTargetingClient;
 import com.zurrtum.create.client.flywheel.backend.compile.FlwProgramsReloader;
 import com.zurrtum.create.client.flywheel.impl.BackendManagerImpl;
 import com.zurrtum.create.client.flywheel.impl.FlwImpl;
-import com.zurrtum.create.client.flywheel.impl.visualization.VisualizationManagerImpl;
+import com.zurrtum.create.client.flywheel.impl.task.FlwTaskExecutor;
 import com.zurrtum.create.client.flywheel.impl.visualization.VisualizationEventHandler;
 import com.zurrtum.create.client.flywheel.lib.util.LevelAttached;
 import com.zurrtum.create.client.flywheel.lib.util.RendererReloadCache;
@@ -131,7 +132,7 @@ public abstract class MinecraftMixin {
         FlwImpl.freezeRegistries();
     }
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;registerReloadListeners"))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;registerReloadListeners(Lnet/minecraft/server/packs/resources/ReloadableResourceManager;)V"))
     private void register(GameConfig gameConfig, CallbackInfo ci) {
         if (RenderSystem.getDevice().getDeviceInfo().backendName().equals("OpenGL")) {
             resourceManager.registerReloadListener(FlwProgramsReloader.INSTANCE);
@@ -239,7 +240,7 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "startUseItem()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;"), cancellable = true)
-    private void doItemUse(CallbackInfo ci, @Local InteractionHand hand) {
+    private void doItemUse(CallbackInfo ci, @Local(name = "hand") InteractionHand hand) {
         Minecraft mc = (Minecraft) (Object) this;
         if (hand == InteractionHand.MAIN_HAND && (CurvedTrackInteraction.onClickInput(
             mc,
@@ -340,5 +341,10 @@ public abstract class MinecraftMixin {
             return true;
         }
         return original.call(instance);
+    }
+
+    @Inject(at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), method = "exitWorldAndClose()V")
+    private void onStopping(CallbackInfo ci) {
+        FlwTaskExecutor.get().shutdown();
     }
 }

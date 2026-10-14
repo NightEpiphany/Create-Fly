@@ -1,15 +1,12 @@
 package com.zurrtum.create.content.contraptions.actors.plough;
 
-import com.mojang.authlib.GameProfile;
 import com.zurrtum.create.AllAdvancements;
 import com.zurrtum.create.AllBlockTags;
-import com.zurrtum.create.catnip.data.WorldAttached;
 import com.zurrtum.create.catnip.math.VecHelper;
 import com.zurrtum.create.content.contraptions.behaviour.MovementContext;
 import com.zurrtum.create.content.kinetics.base.BlockBreakingMovementBehaviour;
 import com.zurrtum.create.content.trains.track.FakeTrackBlock;
 import com.zurrtum.create.content.trains.track.ITrackBlock;
-import com.zurrtum.create.infrastructure.player.FakePlayerEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,16 +32,16 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class PloughMovementBehaviour extends BlockBreakingMovementBehaviour {
-        private static final GameProfile PLOUGH_PROFILE = new GameProfile(
-            UUID.fromString("7c1b5a0e-3f43-4e0b-9a52-6f1f7d2d9b11"),
-            "Plough"
+    private static final com.mojang.authlib.GameProfile PLOUGH_PROFILE = new com.mojang.authlib.GameProfile(
+        java.util.UUID.fromString("7c1b5a0e-3f43-4e0b-9a52-6f1f7d2d9b11"),
+        "Plough"
     );
-    private static final WorldAttached<FakePlayerEntity> PLOUGH_PLAYERS = new WorldAttached<>(
-            w -> new FakePlayerEntity((ServerLevel) w, PLOUGH_PROFILE)
+    private static final com.zurrtum.create.catnip.data.WorldAttached<com.zurrtum.create.infrastructure.player.FakePlayerEntity> PLOUGH_PLAYERS = new com.zurrtum.create.catnip.data.WorldAttached<>(
+        w -> new com.zurrtum.create.infrastructure.player.FakePlayerEntity((ServerLevel) w, PLOUGH_PROFILE)
     );
+
 
     @Override
     public boolean isActive(MovementContext context) {
@@ -79,6 +76,7 @@ public class PloughMovementBehaviour extends BlockBreakingMovementBehaviour {
             return;
         }
 
+        // 26.3: block transformers dereference the player, so a null player now crashes
         UseOnContext ctx = new UseOnContext(
             world,
             PLOUGH_PLAYERS.get(world),
